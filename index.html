@@ -3,14 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Project Prince — A 35-Week Path to Real Software</title>
-  <meta name="description" content="A 9-month project-based curriculum: Python, TypeScript, FastAPI, Next.js, SQL, Linux deployment, and AI. Capstone: ship a real product with real users." />
-  <meta property="og:title" content="Project Prince" />
-  <meta property="og:description" content="A 9-month curriculum that takes a beginner from zero to shipping a real AI-powered web app on their own infrastructure." />
-  <meta property="og:type" content="website" />
+  <title>Project Prince — Real progress, real curriculum</title>
+  <meta name="description" content="A 9-month project-based curriculum with real progress tracking. Python, TypeScript, FastAPI, Next.js, SQL, deploy, AI capstone." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52'%3E%F0%9F%8E%AF%3C/text%3E%3C/svg%3E" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    // Supabase client — auth + DB
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.4';
+    window.__createSupabaseClient = createClient;
+  </script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -22,21 +24,14 @@
           },
           colors: {
             brand: {
-              50:  '#f0f9ff',
-              100: '#e0f2fe',
-              200: '#bae6fd',
-              400: '#38bdf8',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-              900: '#0c4a6e',
+              50:'#f0f9ff',100:'#e0f2fe',200:'#bae6fd',400:'#38bdf8',
+              500:'#0ea5e9',600:'#0284c7',700:'#0369a1',900:'#0c4a6e',
             },
           },
         },
       },
     };
   </script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -45,35 +40,28 @@
     :root { color-scheme: dark light; }
     html { scroll-behavior: smooth; }
     body { font-feature-settings: 'cv11', 'ss01'; }
-
-    /* Gradient mesh background */
     .mesh {
       background-image:
         radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
         radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.10) 0px, transparent 50%),
         radial-gradient(at 50% 100%, rgba(34, 197, 94, 0.08) 0px, transparent 50%);
     }
-
-    /* Subtle card lift on hover */
-    .card-lift { transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+    .card-lift { transition: transform 200ms ease, box-shadow 200ms ease; }
     .card-lift:hover { transform: translateY(-2px); }
-
-    /* Animated dotted progress */
     @keyframes pulse-slow { 0%,100% { opacity: 1 } 50% { opacity: 0.5 } }
     .pulse-slow { animation: pulse-slow 2s infinite; }
-
-    /* Print: drop everything that won't render well on paper */
-    @media print {
-      .no-print { display: none !important; }
-    }
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+    details[open] .chevron { transform: rotate(90deg); }
+    .chevron { transition: transform 150ms ease; }
+    .item-row:hover { background-color: rgba(14,165,233,0.04); }
+    @media print { .no-print { display: none !important; } }
   </style>
 </head>
 
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased min-h-screen">
 
-  <!-- =========================================================
-       NAV
-       ========================================================= -->
+  <!-- =============== NAV =============== -->
   <header class="sticky top-0 z-30 backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border-b border-slate-200 dark:border-slate-800 no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <nav class="flex h-14 items-center justify-between">
@@ -82,30 +70,44 @@
           <span>Project Prince</span>
         </a>
         <div class="hidden md:flex items-center gap-6 text-sm">
+          <a class="hover:text-brand-500 transition" href="#progress">Progress</a>
           <a class="hover:text-brand-500 transition" href="#phases">Phases</a>
-          <a class="hover:text-brand-500 transition" href="#how">How to use</a>
-          <a class="hover:text-brand-500 transition" href="#rules">The rules</a>
-          <a class="hover:text-brand-500 transition" href="#reward">Reward</a>
-          <a class="hover:text-brand-500 transition" href="https://github.com/jakkzz/prince-curriculum" target="_blank" rel="noreferrer">
-            <svg class="inline-block h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.86 8.37 6.84 9.72.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.35-1.1.63-1.36-2.22-.26-4.55-1.13-4.55-5.02 0-1.11.39-2.02 1.03-2.74-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.42 9.42 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.74 0 3.9-2.34 4.76-4.57 5.02.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49C19.14 20.62 22 16.78 22 12.25 22 6.58 17.52 2 12 2z"/></svg>
-            GitHub
-          </a>
+          <a class="hover:text-brand-500 transition" href="#how">How</a>
+          <a class="hover:text-brand-500 transition" href="#rules">Rules</a>
+          <a class="hover:text-brand-500 transition" href="https://github.com/jakkzz/prince-curriculum" target="_blank" rel="noreferrer">GitHub</a>
         </div>
-        <button
-          onclick="toggleTheme()"
-          aria-label="Toggle theme"
-          class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-        >
-          <svg id="iconSun" class="h-4 w-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          <svg id="iconMoon" class="h-4 w-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
+        <div class="flex items-center gap-2">
+          <!-- Auth area -->
+          <div id="authArea">
+            <button id="signInBtn" onclick="signIn()" class="hidden inline-flex items-center gap-2 rounded-md bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white text-sm font-medium px-3 py-1.5 hover:opacity-90 transition">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.86 8.37 6.84 9.72.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.35-1.1.63-1.36-2.22-.26-4.55-1.13-4.55-5.02 0-1.11.39-2.02 1.03-2.74-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.42 9.42 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.74 0 3.9-2.34 4.76-4.57 5.02.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49C19.14 20.62 22 16.78 22 12.25 22 6.58 17.52 2 12 2z"/></svg>
+              <span>Sign in</span>
+            </button>
+            <div id="userMenu" class="hidden relative">
+              <button onclick="toggleUserMenu()" class="inline-flex items-center gap-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 px-2 py-1.5 transition">
+                <img id="userAvatar" class="h-7 w-7 rounded-full" alt="" />
+                <span id="userName" class="text-sm font-medium hidden sm:inline"></span>
+                <svg class="h-3 w-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div id="userDropdown" class="hidden absolute right-0 mt-1 w-48 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg py-1 text-sm">
+                <button onclick="exportProgress()" class="w-full text-left px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800">Export JSON</button>
+                <button onclick="confirmReset()" class="w-full text-left px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800 text-rose-600 dark:text-rose-400">Wipe my progress</button>
+                <hr class="my-1 border-slate-200 dark:border-slate-700" />
+                <button onclick="signOut()" class="w-full text-left px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800">Sign out</button>
+              </div>
+            </div>
+          </div>
+          <button onclick="toggleTheme()" aria-label="Toggle theme"
+                  class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <svg class="h-4 w-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+            <svg class="h-4 w-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
       </nav>
     </div>
   </header>
 
-  <!-- =========================================================
-       HERO
-       ========================================================= -->
+  <!-- =============== HERO =============== -->
   <section id="top" class="relative mesh">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
       <div class="max-w-3xl">
@@ -121,477 +123,1504 @@
           A 9-month project-based curriculum that takes a beginner from <em>"what's a terminal"</em>
           to shipping a real AI-powered web app on their own server, used by real people.
         </p>
-
         <div class="mt-8 flex flex-wrap items-center gap-3">
-          <a href="#phases"
-             class="inline-flex items-center gap-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-medium px-5 py-2.5 transition shadow-sm">
+          <a href="#phases" class="inline-flex items-center gap-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-medium px-5 py-2.5 transition shadow-sm">
             Start with Phase 0
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
           </a>
-          <a href="#how"
-             class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900 font-medium px-5 py-2.5 transition">
+          <a href="#how" class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900 font-medium px-5 py-2.5 transition">
             How to use this
           </a>
         </div>
       </div>
-
-      <!-- Stats strip -->
-      <dl class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
-          <dt class="text-xs uppercase tracking-wide text-slate-500">Weeks</dt>
-          <dd class="mt-1 text-3xl font-bold">35</dd>
-        </div>
-        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
-          <dt class="text-xs uppercase tracking-wide text-slate-500">Lessons</dt>
-          <dd class="mt-1 text-3xl font-bold">60+</dd>
-        </div>
-        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
-          <dt class="text-xs uppercase tracking-wide text-slate-500">Quiz Qs</dt>
-          <dd class="mt-1 text-3xl font-bold">~1,500</dd>
-        </div>
-        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
-          <dt class="text-xs uppercase tracking-wide text-slate-500">Projects shipped</dt>
-          <dd class="mt-1 text-3xl font-bold">8</dd>
-        </div>
-      </dl>
     </div>
   </section>
 
-  <!-- =========================================================
-       PHASES
-       ========================================================= -->
+  <!-- =============== PROGRESS DASHBOARD =============== -->
+  <section id="progress" class="py-12 border-y border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Banner: setup required -->
+      <div id="setupBanner" class="hidden rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-900/10 p-6">
+        <h3 class="font-semibold text-amber-900 dark:text-amber-200">⚙️ Set up Supabase to enable progress tracking</h3>
+        <p class="mt-2 text-sm text-amber-900 dark:text-amber-200/80">
+          Progress tracking needs a free Supabase project (10-min setup). Until then, you can still
+          browse all the lessons — they're linked below. <br />
+          <a href="https://github.com/jakkzz/prince-curriculum-mentor/blob/main/supabase/setup.md"
+             target="_blank" class="underline font-medium">Read the setup guide →</a>
+        </p>
+      </div>
+
+      <!-- Banner: signed out -->
+      <div id="signedOutBanner" class="hidden rounded-xl border border-brand-200 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/10 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h3 class="font-semibold text-brand-900 dark:text-brand-200">Sign in to track progress</h3>
+          <p class="mt-1 text-sm text-brand-900/80 dark:text-brand-200/80">One-click with GitHub. Synced across all your devices.</p>
+        </div>
+        <button onclick="signIn()" class="inline-flex items-center gap-2 rounded-md bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white text-sm font-medium px-4 py-2 hover:opacity-90 transition self-start">
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.86 8.37 6.84 9.72.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.35-1.1.63-1.36-2.22-.26-4.55-1.13-4.55-5.02 0-1.11.39-2.02 1.03-2.74-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.42 9.42 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.74 0 3.9-2.34 4.76-4.57 5.02.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49C19.14 20.62 22 16.78 22 12.25 22 6.58 17.52 2 12 2z"/></svg>
+          Sign in with GitHub
+        </button>
+      </div>
+
+      <!-- Banner: signed in - shows dashboard -->
+      <div id="dashboard" class="hidden">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-2xl font-bold tracking-tight">Your progress</h2>
+            <p class="text-sm text-slate-500 mt-1">Signed in as <span id="dashEmail" class="font-mono"></span></p>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-extrabold tabular-nums" id="dashPct">0%</div>
+            <div class="text-xs text-slate-500"><span id="dashDone">0</span> of <span id="dashTotal">0</span> items complete</div>
+          </div>
+        </div>
+
+        <!-- Overall progress bar -->
+        <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+          <div id="dashBar" class="h-full bg-gradient-to-r from-brand-500 to-violet-500 transition-all duration-500" style="width: 0%"></div>
+        </div>
+
+        <!-- Per-phase mini-bars -->
+        <div id="phaseMiniBars" class="mt-6 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3"></div>
+
+        <!-- Next up -->
+        <div id="nextUp" class="mt-6 hidden rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 flex items-center justify-between">
+          <div>
+            <div class="text-xs uppercase tracking-wide text-slate-500">Next up</div>
+            <a id="nextUpLink" class="text-sm font-medium hover:text-brand-500 transition" href="#"></a>
+          </div>
+          <a id="nextUpJump" class="text-xs text-brand-500 font-medium" href="#">Open →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =============== PHASES =============== -->
   <section id="phases" class="py-16 sm:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
         <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">The path</h2>
         <p class="mt-3 text-slate-600 dark:text-slate-400">
-          Eight phases, one after the other. Each ends with a <strong>gate</strong> — a live demonstration with the mentor.
-          You don't move to the next phase until you can do the current one unaided.
+          Eight phases. Click any phase to expand its lessons and quizzes.
         </p>
       </div>
-
-      <div id="phaseGrid" class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <!-- Phase cards inserted by JS below -->
-      </div>
+      <div id="phaseList" class="mt-10 space-y-4"></div>
     </div>
   </section>
 
-  <!-- =========================================================
-       HOW TO USE
-       ========================================================= -->
+
+  <!-- =============== HOW =============== -->
   <section id="how" class="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
         <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">How to use this</h2>
-        <p class="mt-3 text-slate-600 dark:text-slate-400">
-          A 35-week course is long. The structure exists so you can't get lost.
-        </p>
+        <p class="mt-3 text-slate-600 dark:text-slate-400">A 35-week course is long. The structure exists so you can't get lost.</p>
       </div>
-
       <ol class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
         <li class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
-          <div class="flex items-center gap-3">
-            <span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">1</span>
-            <h3 class="font-semibold">Daily</h3>
-          </div>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            ~3 hours, 6 days/week. Read the lesson, build the mini-project,
-            commit. Every weekday. The streak is the structure.
-          </p>
+          <div class="flex items-center gap-3"><span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">1</span><h3 class="font-semibold">Daily</h3></div>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">~3 hours, 6 days/week. Read the lesson, build the mini-project, commit. The streak is the structure.</p>
         </li>
         <li class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
-          <div class="flex items-center gap-3">
-            <span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">2</span>
-            <h3 class="font-semibold">Weekly quiz</h3>
-          </div>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            End of each week: take the quiz (20–35 questions, 5 sections).
-            Below the passing score? Re-read, retake. No moving on until you understand.
-          </p>
+          <div class="flex items-center gap-3"><span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">2</span><h3 class="font-semibold">Weekly quiz</h3></div>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">End of each week: take the quiz. Below passing? Re-read, retake. Check the box only when you actually pass.</p>
         </li>
         <li class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
-          <div class="flex items-center gap-3">
-            <span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">3</span>
-            <h3 class="font-semibold">Friday check-in</h3>
-          </div>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            30 min with your mentor. You demo something running. They pick
-            a file at random; you explain it. Done well = ship it.
-          </p>
+          <div class="flex items-center gap-3"><span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">3</span><h3 class="font-semibold">Friday check-in</h3></div>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">30 min with the mentor. Demo something running. Walk through code. Plan next week.</p>
         </li>
       </ol>
-
       <div class="mt-6 rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-900/10 p-6">
         <p class="text-sm text-amber-900 dark:text-amber-200">
-          <strong>The hardest part isn't the code.</strong> It's sitting down on the Tuesday in February
-          when nobody's watching. Build the habit. The rest is downstream.
+          <strong>The hardest part isn't the code.</strong> It's sitting down on the Tuesday in February when nobody's watching.
         </p>
       </div>
     </div>
   </section>
 
-  <!-- =========================================================
-       THE RULES
-       ========================================================= -->
+  <!-- =============== RULES =============== -->
   <section id="rules" class="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl">
         <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Three rules</h2>
         <p class="mt-3 text-slate-600 dark:text-slate-400">Non-negotiable.</p>
       </div>
-
       <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="rounded-xl border-l-4 border-l-rose-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
-          <h3 class="font-semibold flex items-center gap-2">
-            <span class="text-rose-500">🚫</span>
-            No AI in Phases 0–6
-          </h3>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            No Copilot, Cursor, ChatGPT. Phase 7 unlocks AI — by then you'll have the
-            judgment to know when it's wrong. That judgment is the prize.
-          </p>
+          <h3 class="font-semibold flex items-center gap-2"><span class="text-rose-500">🚫</span> No AI in Phases 0–6</h3>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">Phase 7 unlocks AI — by then you have the judgment to know when it's wrong.</p>
         </div>
-
         <div class="rounded-xl border-l-4 border-l-amber-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
-          <h3 class="font-semibold flex items-center gap-2">
-            <span class="text-amber-500">📝</span>
-            Be honest
-          </h3>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            If you don't understand something, say so. The penalty for confusion is zero.
-            The penalty for pretending is week-12 collapse.
-          </p>
+          <h3 class="font-semibold flex items-center gap-2"><span class="text-amber-500">📝</span> Be honest</h3>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">Don't check a box you haven't actually completed. Mentor will ask you to walk the code; faking caves in fast.</p>
         </div>
-
         <div class="rounded-xl border-l-4 border-l-emerald-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
-          <h3 class="font-semibold flex items-center gap-2">
-            <span class="text-emerald-500">🚀</span>
-            Ship over polish
-          </h3>
-          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
-            Done and ugly beats beautiful and unfinished. Every. Single. Time.
-            Ship first, polish after feedback.
-          </p>
+          <h3 class="font-semibold flex items-center gap-2"><span class="text-emerald-500">🚀</span> Ship over polish</h3>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">Done and ugly beats beautiful and unfinished.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- =========================================================
-       REWARD
-       ========================================================= -->
-  <section id="reward" class="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-brand-50/30 to-white dark:from-slate-950 dark:via-brand-900/10 dark:to-slate-950">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">The reward</h2>
-          <p class="mt-3 text-slate-600 dark:text-slate-400">
-            Earned at Phase 7's capstone gate — your AI feature shipped, real users, eval pass rate, design doc.
-          </p>
-
-          <div class="mt-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm">
-            <div class="flex items-start gap-4">
-              <div class="text-5xl">💻</div>
-              <div class="min-w-0">
-                <h3 class="text-2xl font-bold">MacBook Air 2026</h3>
-                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">16 GB RAM · 512 GB SSD</p>
-                <p class="mt-3 text-sm text-slate-700 dark:text-slate-300">
-                  Your first real machine for real work. The spec is locked because Apple Silicon RAM/SSD aren't upgradable —
-                  and because the curriculum genuinely needs 16/512 by Phase 5.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <p class="mt-6 text-sm text-slate-500 italic">
-            The laptop isn't the reward. The skill is. The laptop is the receipt.
-          </p>
-        </div>
-
-        <!-- Milestone rewards timeline -->
-        <div>
-          <h3 class="font-semibold text-sm uppercase tracking-wide text-slate-500">Along the way</h3>
-          <ol class="mt-4 relative border-l-2 border-slate-200 dark:border-slate-800 ml-2 space-y-5">
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
-              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 0 gate</div>
-              <div class="font-medium">Mechanical keyboard</div>
-            </li>
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
-              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 1 gate</div>
-              <div class="font-medium">Second monitor</div>
-            </li>
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
-              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 2 gate</div>
-              <div class="font-medium">Your own domain + VPS credit</div>
-            </li>
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
-              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 3 gate</div>
-              <div class="font-medium">Good chair</div>
-            </li>
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
-              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 4 gate</div>
-              <div class="font-medium">Noise-cancel headphones</div>
-            </li>
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
-              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 5 gate</div>
-              <div class="font-medium">Tech learning subscription</div>
-            </li>
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
-              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 6 gate</div>
-              <div class="font-medium">Tech conference OR 1:1 with an engineer</div>
-            </li>
-            <li class="ml-6 pb-1">
-              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-amber-500"></span>
-              <div class="text-xs uppercase tracking-wide text-amber-600 dark:text-amber-400 font-semibold">Phase 7 capstone</div>
-              <div class="font-bold text-base">MacBook Air 2026 🎯</div>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================================================
-       FOOTER
-       ========================================================= -->
   <footer class="py-12 border-t border-slate-200 dark:border-slate-800 text-sm text-slate-500">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div>
-        Curriculum source ·
-        <a class="hover:text-brand-500" href="https://github.com/jakkzz/prince-curriculum">github.com/jakkzz/prince-curriculum</a>
+        Curriculum source · <a class="hover:text-brand-500" href="https://github.com/jakkzz/prince-curriculum">github.com/jakkzz/prince-curriculum</a>
       </div>
-      <div class="text-xs text-slate-400">
-        Built by Jakkrit · 35 weeks of work for one good first machine
-      </div>
+      <div class="text-xs text-slate-400">Built by Jakkrit · 35 weeks of work for one good first machine</div>
     </div>
   </footer>
 
-  <!-- =========================================================
-       SCRIPTS — phase data + interactions
-       ========================================================= -->
+  <!-- =============== SCRIPTS =============== -->
   <script>
-    // ---------- theme toggle ----------
+    // -----------------------------------------------------------
+    // 1. Supabase config — fill these in after creating your project
+    //    See supabase/setup.md for step-by-step instructions.
+    // -----------------------------------------------------------
+    const SUPABASE_CONFIG = {
+      url:     'YOUR_SUPABASE_URL',          // e.g. https://abcdefghij.supabase.co
+      anonKey: 'YOUR_SUPABASE_ANON_KEY',     // a long string starting with eyJ...
+    };
+
+    // Phase metadata for the cards + dashboard
+    const PHASES = [
+      { num:0, title:'Setup & Habits', weeks:'1 week', emoji:'🛠️', accent:'slate',
+        summary:'Terminal, git, GitHub. Daily commit habit. Type 40+ wpm.', path:'phase-0-setup/' },
+      { num:1, title:'Python & CLI', weeks:'5 weeks', emoji:'🐍', accent:'sky',
+        summary:'Real Python with types, tests, classes. Ship two installable CLI tools.', path:'phase-1-python-cli/' },
+      { num:2, title:'Web & SQL', weeks:'4 weeks', emoji:'🌐', accent:'emerald',
+        summary:'HTML, CSS, Tailwind, HTTP, browser devtools, real SQL.', path:'phase-2-web-sql/' },
+      { num:3, title:'FastAPI Backend', weeks:'6 weeks', emoji:'⚡', accent:'violet',
+        summary:'A real REST API: auth with JWT, Postgres, tests, Docker.', path:'phase-3-fastapi/' },
+      { num:4, title:'TypeScript & Next.js', weeks:'6 weeks', emoji:'⚛️', accent:'fuchsia',
+        summary:'A typed full-stack app: server components, forms, optimistic UI.', path:'phase-4-typescript-nextjs/' },
+      { num:5, title:'Deploy & Networking', weeks:'4 weeks', emoji:'🌍', accent:'orange',
+        summary:'Your own VPS. HTTPS. CI/CD. Backups.', path:'phase-5-deploy-vps/' },
+      { num:6, title:'Real Product', weeks:'5 weeks', emoji:'🎁', accent:'red',
+        summary:'Build something for real people. Get 3+ users in week 4.', path:'phase-6-real-product/' },
+      { num:7, title:'AI Capstone', weeks:'4 weeks', emoji:'🤖', accent:'amber',
+        summary:'AI feature with evals, cost discipline, prompt-injection defense.', path:'phase-7-ai/' },
+    ];
+
+    // 114 lesson + quiz items
+// 114 items total
+const ITEMS = [
+  {
+    "id": "phase-0/lesson/01-install",
+    "phase": 0,
+    "week": 1,
+    "type": "lesson",
+    "title": "Day 1 — Install everything",
+    "path": "phase-0-setup/lessons/01-install.md"
+  },
+  {
+    "id": "phase-0/lesson/02-terminal",
+    "phase": 0,
+    "week": 1,
+    "type": "lesson",
+    "title": "Day 2 — The terminal",
+    "path": "phase-0-setup/lessons/02-terminal.md"
+  },
+  {
+    "id": "phase-0/lesson/03-git",
+    "phase": 0,
+    "week": 1,
+    "type": "lesson",
+    "title": "Day 3 — Git fundamentals",
+    "path": "phase-0-setup/lessons/03-git.md"
+  },
+  {
+    "id": "phase-0/lesson/04-github",
+    "phase": 0,
+    "week": 1,
+    "type": "lesson",
+    "title": "Day 4 — GitHub workflow",
+    "path": "phase-0-setup/lessons/04-github.md"
+  },
+  {
+    "id": "phase-0/lesson/05-habits",
+    "phase": 0,
+    "week": 1,
+    "type": "lesson",
+    "title": "Day 5 — Habits & typing",
+    "path": "phase-0-setup/lessons/05-habits.md"
+  },
+  {
+    "id": "phase-0/quiz/main",
+    "phase": 0,
+    "week": 1,
+    "type": "quiz",
+    "title": "Phase 0 Quiz",
+    "path": "phase-0-setup/quiz.md"
+  },
+  {
+    "id": "phase-1/lesson/00-setup-environment",
+    "phase": 1,
+    "week": 1,
+    "type": "lesson",
+    "title": "Day 0 — Set up Python environment",
+    "path": "phase-1-python-cli/lessons/00-setup-environment.md"
+  },
+  {
+    "id": "phase-1/lesson/01-hello-python",
+    "phase": 1,
+    "week": 1,
+    "day": 1,
+    "type": "lesson",
+    "title": "Day 1 — Hello Python",
+    "path": "phase-1-python-cli/lessons/01-hello-python.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/01-hello-python",
+    "phase": 1,
+    "week": 1,
+    "day": 1,
+    "type": "quiz",
+    "title": "Day 1 Quiz — Hello Python",
+    "path": "phase-1-python-cli/lessons/01-hello-python-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/02-types-and-values",
+    "phase": 1,
+    "week": 1,
+    "day": 2,
+    "type": "lesson",
+    "title": "Day 2 — Types and values",
+    "path": "phase-1-python-cli/lessons/02-types-and-values.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/02-types-and-values",
+    "phase": 1,
+    "week": 1,
+    "day": 2,
+    "type": "quiz",
+    "title": "Day 2 Quiz — Types and values",
+    "path": "phase-1-python-cli/lessons/02-types-and-values-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/03-control-flow",
+    "phase": 1,
+    "week": 1,
+    "day": 3,
+    "type": "lesson",
+    "title": "Day 3 — Control flow",
+    "path": "phase-1-python-cli/lessons/03-control-flow.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/03-control-flow",
+    "phase": 1,
+    "week": 1,
+    "day": 3,
+    "type": "quiz",
+    "title": "Day 3 Quiz — Control flow",
+    "path": "phase-1-python-cli/lessons/03-control-flow-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/04-functions",
+    "phase": 1,
+    "week": 1,
+    "day": 4,
+    "type": "lesson",
+    "title": "Day 4 — Functions",
+    "path": "phase-1-python-cli/lessons/04-functions.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/04-functions",
+    "phase": 1,
+    "week": 1,
+    "day": 4,
+    "type": "quiz",
+    "title": "Day 4 Quiz — Functions",
+    "path": "phase-1-python-cli/lessons/04-functions-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/05-lists-dicts-sets",
+    "phase": 1,
+    "week": 1,
+    "day": 5,
+    "type": "lesson",
+    "title": "Day 5 — Lists, dicts, sets",
+    "path": "phase-1-python-cli/lessons/05-lists-dicts-sets.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/05-lists-dicts-sets",
+    "phase": 1,
+    "week": 1,
+    "day": 5,
+    "type": "quiz",
+    "title": "Day 5 Quiz — Lists, dicts, sets",
+    "path": "phase-1-python-cli/lessons/05-lists-dicts-sets-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/06-modules",
+    "phase": 1,
+    "week": 2,
+    "day": 6,
+    "type": "lesson",
+    "title": "Day 6 — Modules & package structure",
+    "path": "phase-1-python-cli/lessons/06-modules.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/06-modules",
+    "phase": 1,
+    "week": 2,
+    "day": 6,
+    "type": "quiz",
+    "title": "Day 6 Quiz — Modules & package structure",
+    "path": "phase-1-python-cli/lessons/06-modules-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/07-http-requests",
+    "phase": 1,
+    "week": 2,
+    "day": 7,
+    "type": "lesson",
+    "title": "Day 7 — HTTP & requests",
+    "path": "phase-1-python-cli/lessons/07-http-requests.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/07-http-requests",
+    "phase": 1,
+    "week": 2,
+    "day": 7,
+    "type": "quiz",
+    "title": "Day 7 Quiz — HTTP & requests",
+    "path": "phase-1-python-cli/lessons/07-http-requests-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/08-json-parsing",
+    "phase": 1,
+    "week": 2,
+    "day": 8,
+    "type": "lesson",
+    "title": "Day 8 — JSON parsing",
+    "path": "phase-1-python-cli/lessons/08-json-parsing.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/08-json-parsing",
+    "phase": 1,
+    "week": 2,
+    "day": 8,
+    "type": "quiz",
+    "title": "Day 8 Quiz — JSON parsing",
+    "path": "phase-1-python-cli/lessons/08-json-parsing-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/09-caching",
+    "phase": 1,
+    "week": 2,
+    "day": 9,
+    "type": "lesson",
+    "title": "Day 9 — Caching",
+    "path": "phase-1-python-cli/lessons/09-caching.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/09-caching",
+    "phase": 1,
+    "week": 2,
+    "day": 9,
+    "type": "quiz",
+    "title": "Day 9 Quiz — Caching",
+    "path": "phase-1-python-cli/lessons/09-caching-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/10-wire-it-together",
+    "phase": 1,
+    "week": 2,
+    "day": 10,
+    "type": "lesson",
+    "title": "Day 10 — Wire it together",
+    "path": "phase-1-python-cli/lessons/10-wire-it-together.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/10-wire-it-together",
+    "phase": 1,
+    "week": 2,
+    "day": 10,
+    "type": "quiz",
+    "title": "Day 10 Quiz — Wire it together",
+    "path": "phase-1-python-cli/lessons/10-wire-it-together-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/11-classes-basics",
+    "phase": 1,
+    "week": 3,
+    "day": 11,
+    "type": "lesson",
+    "title": "Day 11 — Classes basics",
+    "path": "phase-1-python-cli/lessons/11-classes-basics.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/11-classes-basics",
+    "phase": 1,
+    "week": 3,
+    "day": 11,
+    "type": "quiz",
+    "title": "Day 11 Quiz — Classes basics",
+    "path": "phase-1-python-cli/lessons/11-classes-basics-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/12-dataclasses",
+    "phase": 1,
+    "week": 3,
+    "day": 12,
+    "type": "lesson",
+    "title": "Day 12 — Dataclasses",
+    "path": "phase-1-python-cli/lessons/12-dataclasses.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/12-dataclasses",
+    "phase": 1,
+    "week": 3,
+    "day": 12,
+    "type": "quiz",
+    "title": "Day 12 Quiz — Dataclasses",
+    "path": "phase-1-python-cli/lessons/12-dataclasses-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/13-properties-inheritance",
+    "phase": 1,
+    "week": 3,
+    "day": 13,
+    "type": "lesson",
+    "title": "Day 13 — Properties & inheritance",
+    "path": "phase-1-python-cli/lessons/13-properties-inheritance.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/13-properties-inheritance",
+    "phase": 1,
+    "week": 3,
+    "day": 13,
+    "type": "quiz",
+    "title": "Day 13 Quiz — Properties & inheritance",
+    "path": "phase-1-python-cli/lessons/13-properties-inheritance-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/14-oop-refactor",
+    "phase": 1,
+    "week": 3,
+    "day": 14,
+    "type": "lesson",
+    "title": "Day 14 — OOP refactor",
+    "path": "phase-1-python-cli/lessons/14-oop-refactor.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/14-oop-refactor",
+    "phase": 1,
+    "week": 3,
+    "day": 14,
+    "type": "quiz",
+    "title": "Day 14 Quiz — OOP refactor",
+    "path": "phase-1-python-cli/lessons/14-oop-refactor-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/15-spaced-repetition",
+    "phase": 1,
+    "week": 3,
+    "day": 15,
+    "type": "lesson",
+    "title": "Day 15 — Spaced repetition",
+    "path": "phase-1-python-cli/lessons/15-spaced-repetition.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/15-spaced-repetition",
+    "phase": 1,
+    "week": 3,
+    "day": 15,
+    "type": "quiz",
+    "title": "Day 15 Quiz — Spaced repetition",
+    "path": "phase-1-python-cli/lessons/15-spaced-repetition-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/16-pytest-basics",
+    "phase": 1,
+    "week": 4,
+    "day": 16,
+    "type": "lesson",
+    "title": "Day 16 — pytest basics",
+    "path": "phase-1-python-cli/lessons/16-pytest-basics.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/16-pytest-basics",
+    "phase": 1,
+    "week": 4,
+    "day": 16,
+    "type": "quiz",
+    "title": "Day 16 Quiz — pytest basics",
+    "path": "phase-1-python-cli/lessons/16-pytest-basics-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/17-tdd",
+    "phase": 1,
+    "week": 4,
+    "day": 17,
+    "type": "lesson",
+    "title": "Day 17 — TDD",
+    "path": "phase-1-python-cli/lessons/17-tdd.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/17-tdd",
+    "phase": 1,
+    "week": 4,
+    "day": 17,
+    "type": "quiz",
+    "title": "Day 17 Quiz — TDD",
+    "path": "phase-1-python-cli/lessons/17-tdd-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/18-fixtures",
+    "phase": 1,
+    "week": 4,
+    "day": 18,
+    "type": "lesson",
+    "title": "Day 18 — Fixtures",
+    "path": "phase-1-python-cli/lessons/18-fixtures.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/18-fixtures",
+    "phase": 1,
+    "week": 4,
+    "day": 18,
+    "type": "quiz",
+    "title": "Day 18 Quiz — Fixtures",
+    "path": "phase-1-python-cli/lessons/18-fixtures-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/19-mocks",
+    "phase": 1,
+    "week": 4,
+    "day": 19,
+    "type": "lesson",
+    "title": "Day 19 — Mocks",
+    "path": "phase-1-python-cli/lessons/19-mocks.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/19-mocks",
+    "phase": 1,
+    "week": 4,
+    "day": 19,
+    "type": "quiz",
+    "title": "Day 19 Quiz — Mocks",
+    "path": "phase-1-python-cli/lessons/19-mocks-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/20-coverage",
+    "phase": 1,
+    "week": 4,
+    "day": 20,
+    "type": "lesson",
+    "title": "Day 20 — Coverage & CI",
+    "path": "phase-1-python-cli/lessons/20-coverage.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/20-coverage",
+    "phase": 1,
+    "week": 4,
+    "day": 20,
+    "type": "quiz",
+    "title": "Day 20 Quiz — Coverage & CI",
+    "path": "phase-1-python-cli/lessons/20-coverage-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/21-argparse",
+    "phase": 1,
+    "week": 5,
+    "day": 21,
+    "type": "lesson",
+    "title": "Day 21 — argparse — real CLI",
+    "path": "phase-1-python-cli/lessons/21-argparse.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/21-argparse",
+    "phase": 1,
+    "week": 5,
+    "day": 21,
+    "type": "quiz",
+    "title": "Day 21 Quiz — argparse — real CLI",
+    "path": "phase-1-python-cli/lessons/21-argparse-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/22-packaging",
+    "phase": 1,
+    "week": 5,
+    "day": 22,
+    "type": "lesson",
+    "title": "Day 22 — Packaging",
+    "path": "phase-1-python-cli/lessons/22-packaging.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/22-packaging",
+    "phase": 1,
+    "week": 5,
+    "day": 22,
+    "type": "quiz",
+    "title": "Day 22 Quiz — Packaging",
+    "path": "phase-1-python-cli/lessons/22-packaging-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/23-pomo-capstone-design",
+    "phase": 1,
+    "week": 5,
+    "day": 23,
+    "type": "lesson",
+    "title": "Day 23 — Pomo design",
+    "path": "phase-1-python-cli/lessons/23-pomo-capstone-design.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/23-pomo-capstone-design",
+    "phase": 1,
+    "week": 5,
+    "day": 23,
+    "type": "quiz",
+    "title": "Day 23 Quiz — Pomo design",
+    "path": "phase-1-python-cli/lessons/23-pomo-capstone-design-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/24-pomo-capstone-ship",
+    "phase": 1,
+    "week": 5,
+    "day": 24,
+    "type": "lesson",
+    "title": "Day 24 — Pomo ship",
+    "path": "phase-1-python-cli/lessons/24-pomo-capstone-ship.ipynb"
+  },
+  {
+    "id": "phase-1/quiz/24-pomo-capstone-ship",
+    "phase": 1,
+    "week": 5,
+    "day": 24,
+    "type": "quiz",
+    "title": "Day 24 Quiz — Pomo ship",
+    "path": "phase-1-python-cli/lessons/24-pomo-capstone-ship-quiz.ipynb"
+  },
+  {
+    "id": "phase-1/lesson/25-phase-1-retro",
+    "phase": 1,
+    "week": 5,
+    "day": 25,
+    "type": "lesson",
+    "title": "Day 25 — Phase 1 retro",
+    "path": "phase-1-python-cli/lessons/25-phase-1-retro.ipynb"
+  },
+  {
+    "id": "phase-2/lesson/week-1",
+    "phase": 2,
+    "week": 1,
+    "type": "lesson",
+    "title": "Week 1 — HTML & CSS",
+    "path": "phase-2-web-sql/lessons.md"
+  },
+  {
+    "id": "phase-2/quiz/week-1-html-css",
+    "phase": 2,
+    "week": 1,
+    "type": "quiz",
+    "title": "Week 1 Quiz — HTML & CSS",
+    "path": "phase-2-web-sql/quizzes/week-1-html-css-quiz.md"
+  },
+  {
+    "id": "phase-2/lesson/week-2",
+    "phase": 2,
+    "week": 2,
+    "type": "lesson",
+    "title": "Week 2 — Tailwind, deploy",
+    "path": "phase-2-web-sql/lessons.md"
+  },
+  {
+    "id": "phase-2/quiz/week-2-tailwind-deploy",
+    "phase": 2,
+    "week": 2,
+    "type": "quiz",
+    "title": "Week 2 Quiz — Tailwind, deploy",
+    "path": "phase-2-web-sql/quizzes/week-2-tailwind-deploy-quiz.md"
+  },
+  {
+    "id": "phase-2/lesson/week-3",
+    "phase": 2,
+    "week": 3,
+    "type": "lesson",
+    "title": "Week 3 — HTTP & fetch",
+    "path": "phase-2-web-sql/lessons.md"
+  },
+  {
+    "id": "phase-2/quiz/week-3-http-fetch",
+    "phase": 2,
+    "week": 3,
+    "type": "quiz",
+    "title": "Week 3 Quiz — HTTP & fetch",
+    "path": "phase-2-web-sql/quizzes/week-3-http-fetch-quiz.md"
+  },
+  {
+    "id": "phase-2/lesson/week-4",
+    "phase": 2,
+    "week": 4,
+    "type": "lesson",
+    "title": "Week 4 — SQL",
+    "path": "phase-2-web-sql/lessons.md"
+  },
+  {
+    "id": "phase-2/quiz/week-4-sql",
+    "phase": 2,
+    "week": 4,
+    "type": "quiz",
+    "title": "Week 4 Quiz — SQL",
+    "path": "phase-2-web-sql/quizzes/week-4-sql-quiz.md"
+  },
+  {
+    "id": "phase-3/lesson/week-1",
+    "phase": 3,
+    "week": 1,
+    "type": "lesson",
+    "title": "Week 1 — FastAPI fundamentals",
+    "path": "phase-3-fastapi/lessons.md"
+  },
+  {
+    "id": "phase-3/quiz/week-1-fastapi-fundamentals",
+    "phase": 3,
+    "week": 1,
+    "type": "quiz",
+    "title": "Week 1 Quiz — FastAPI fundamentals",
+    "path": "phase-3-fastapi/quizzes/week-1-fastapi-fundamentals-quiz.md"
+  },
+  {
+    "id": "phase-3/lesson/week-2",
+    "phase": 3,
+    "week": 2,
+    "type": "lesson",
+    "title": "Week 2 — SQLAlchemy",
+    "path": "phase-3-fastapi/lessons.md"
+  },
+  {
+    "id": "phase-3/quiz/week-2-sqlalchemy",
+    "phase": 3,
+    "week": 2,
+    "type": "quiz",
+    "title": "Week 2 Quiz — SQLAlchemy",
+    "path": "phase-3-fastapi/quizzes/week-2-sqlalchemy-quiz.md"
+  },
+  {
+    "id": "phase-3/lesson/week-3",
+    "phase": 3,
+    "week": 3,
+    "type": "lesson",
+    "title": "Week 3 — Auth",
+    "path": "phase-3-fastapi/lessons.md"
+  },
+  {
+    "id": "phase-3/quiz/week-3-auth",
+    "phase": 3,
+    "week": 3,
+    "type": "quiz",
+    "title": "Week 3 Quiz — Auth",
+    "path": "phase-3-fastapi/quizzes/week-3-auth-quiz.md"
+  },
+  {
+    "id": "phase-3/lesson/week-4",
+    "phase": 3,
+    "week": 4,
+    "type": "lesson",
+    "title": "Week 4 — Testing",
+    "path": "phase-3-fastapi/lessons.md"
+  },
+  {
+    "id": "phase-3/quiz/week-4-testing",
+    "phase": 3,
+    "week": 4,
+    "type": "quiz",
+    "title": "Week 4 Quiz — Testing",
+    "path": "phase-3-fastapi/quizzes/week-4-testing-quiz.md"
+  },
+  {
+    "id": "phase-3/lesson/week-5",
+    "phase": 3,
+    "week": 5,
+    "type": "lesson",
+    "title": "Week 5 — Production",
+    "path": "phase-3-fastapi/lessons.md"
+  },
+  {
+    "id": "phase-3/quiz/week-5-production",
+    "phase": 3,
+    "week": 5,
+    "type": "quiz",
+    "title": "Week 5 Quiz — Production",
+    "path": "phase-3-fastapi/quizzes/week-5-production-quiz.md"
+  },
+  {
+    "id": "phase-3/lesson/week-6",
+    "phase": 3,
+    "week": 6,
+    "type": "lesson",
+    "title": "Week 6 — Docker & ship",
+    "path": "phase-3-fastapi/lessons.md"
+  },
+  {
+    "id": "phase-3/quiz/week-6-docker-ship",
+    "phase": 3,
+    "week": 6,
+    "type": "quiz",
+    "title": "Week 6 Quiz — Docker & ship",
+    "path": "phase-3-fastapi/quizzes/week-6-docker-ship-quiz.md"
+  },
+  {
+    "id": "phase-4/lesson/week-1",
+    "phase": 4,
+    "week": 1,
+    "type": "lesson",
+    "title": "Week 1 — TypeScript",
+    "path": "phase-4-typescript-nextjs/lessons.md"
+  },
+  {
+    "id": "phase-4/quiz/week-1-typescript",
+    "phase": 4,
+    "week": 1,
+    "type": "quiz",
+    "title": "Week 1 Quiz — TypeScript",
+    "path": "phase-4-typescript-nextjs/quizzes/week-1-typescript-quiz.md"
+  },
+  {
+    "id": "phase-4/lesson/week-2",
+    "phase": 4,
+    "week": 2,
+    "type": "lesson",
+    "title": "Week 2 — React",
+    "path": "phase-4-typescript-nextjs/lessons.md"
+  },
+  {
+    "id": "phase-4/quiz/week-2-react",
+    "phase": 4,
+    "week": 2,
+    "type": "quiz",
+    "title": "Week 2 Quiz — React",
+    "path": "phase-4-typescript-nextjs/quizzes/week-2-react-quiz.md"
+  },
+  {
+    "id": "phase-4/lesson/week-3",
+    "phase": 4,
+    "week": 3,
+    "type": "lesson",
+    "title": "Week 3 — Next.js App Router",
+    "path": "phase-4-typescript-nextjs/lessons.md"
+  },
+  {
+    "id": "phase-4/quiz/week-3-nextjs-app-router",
+    "phase": 4,
+    "week": 3,
+    "type": "quiz",
+    "title": "Week 3 Quiz — Next.js App Router",
+    "path": "phase-4-typescript-nextjs/quizzes/week-3-nextjs-app-router-quiz.md"
+  },
+  {
+    "id": "phase-4/lesson/week-4",
+    "phase": 4,
+    "week": 4,
+    "type": "lesson",
+    "title": "Week 4 — Auth, data, forms",
+    "path": "phase-4-typescript-nextjs/lessons.md"
+  },
+  {
+    "id": "phase-4/quiz/week-4-auth-data-forms",
+    "phase": 4,
+    "week": 4,
+    "type": "quiz",
+    "title": "Week 4 Quiz — Auth, data, forms",
+    "path": "phase-4-typescript-nextjs/quizzes/week-4-auth-data-forms-quiz.md"
+  },
+  {
+    "id": "phase-4/lesson/week-5",
+    "phase": 4,
+    "week": 5,
+    "type": "lesson",
+    "title": "Week 5 — shadcn & design",
+    "path": "phase-4-typescript-nextjs/lessons.md"
+  },
+  {
+    "id": "phase-4/quiz/week-5-shadcn-design",
+    "phase": 4,
+    "week": 5,
+    "type": "quiz",
+    "title": "Week 5 Quiz — shadcn & design",
+    "path": "phase-4-typescript-nextjs/quizzes/week-5-shadcn-design-quiz.md"
+  },
+  {
+    "id": "phase-4/lesson/week-6",
+    "phase": 4,
+    "week": 6,
+    "type": "lesson",
+    "title": "Week 6 — Playwright & deploy",
+    "path": "phase-4-typescript-nextjs/lessons.md"
+  },
+  {
+    "id": "phase-4/quiz/week-6-playwright-deploy",
+    "phase": 4,
+    "week": 6,
+    "type": "quiz",
+    "title": "Week 6 Quiz — Playwright & deploy",
+    "path": "phase-4-typescript-nextjs/quizzes/week-6-playwright-deploy-quiz.md"
+  },
+  {
+    "id": "phase-5/lesson/week-1",
+    "phase": 5,
+    "week": 1,
+    "type": "lesson",
+    "title": "Week 1 — VPS & Linux",
+    "path": "phase-5-deploy-vps/lessons.md"
+  },
+  {
+    "id": "phase-5/quiz/week-1-vps-linux",
+    "phase": 5,
+    "week": 1,
+    "type": "quiz",
+    "title": "Week 1 Quiz — VPS & Linux",
+    "path": "phase-5-deploy-vps/quizzes/week-1-vps-linux-quiz.md"
+  },
+  {
+    "id": "phase-5/lesson/week-2",
+    "phase": 5,
+    "week": 2,
+    "type": "lesson",
+    "title": "Week 2 — DNS, nginx, TLS",
+    "path": "phase-5-deploy-vps/lessons.md"
+  },
+  {
+    "id": "phase-5/quiz/week-2-dns-nginx-tls",
+    "phase": 5,
+    "week": 2,
+    "type": "quiz",
+    "title": "Week 2 Quiz — DNS, nginx, TLS",
+    "path": "phase-5-deploy-vps/quizzes/week-2-dns-nginx-tls-quiz.md"
+  },
+  {
+    "id": "phase-5/lesson/week-3",
+    "phase": 5,
+    "week": 3,
+    "type": "lesson",
+    "title": "Week 3 — Deploy & backups",
+    "path": "phase-5-deploy-vps/lessons.md"
+  },
+  {
+    "id": "phase-5/quiz/week-3-deploy-ci-backups",
+    "phase": 5,
+    "week": 3,
+    "type": "quiz",
+    "title": "Week 3 Quiz — Deploy & backups",
+    "path": "phase-5-deploy-vps/quizzes/week-3-deploy-ci-backups-quiz.md"
+  },
+  {
+    "id": "phase-5/lesson/week-4",
+    "phase": 5,
+    "week": 4,
+    "type": "lesson",
+    "title": "Week 4 — Runbook",
+    "path": "phase-5-deploy-vps/lessons.md"
+  },
+  {
+    "id": "phase-5/quiz/week-4-production-runbook",
+    "phase": 5,
+    "week": 4,
+    "type": "quiz",
+    "title": "Week 4 Quiz — Runbook",
+    "path": "phase-5-deploy-vps/quizzes/week-4-production-runbook-quiz.md"
+  },
+  {
+    "id": "phase-6/lesson/week-1",
+    "phase": 6,
+    "week": 1,
+    "type": "lesson",
+    "title": "Week 1 — Design & scope",
+    "path": "phase-6-real-product/lessons.md"
+  },
+  {
+    "id": "phase-6/quiz/week-1-design-scope",
+    "phase": 6,
+    "week": 1,
+    "type": "quiz",
+    "title": "Week 1 Quiz — Design & scope",
+    "path": "phase-6-real-product/quizzes/week-1-design-scope-quiz.md"
+  },
+  {
+    "id": "phase-6/lesson/week-2",
+    "phase": 6,
+    "week": 2,
+    "type": "lesson",
+    "title": "Week 2 — Ship MVP",
+    "path": "phase-6-real-product/lessons.md"
+  },
+  {
+    "id": "phase-6/quiz/week-2-ship-mvp",
+    "phase": 6,
+    "week": 2,
+    "type": "quiz",
+    "title": "Week 2 Quiz — Ship MVP",
+    "path": "phase-6-real-product/quizzes/week-2-ship-mvp-quiz.md"
+  },
+  {
+    "id": "phase-6/lesson/week-3",
+    "phase": 6,
+    "week": 3,
+    "type": "lesson",
+    "title": "Week 3 — Real users",
+    "path": "phase-6-real-product/lessons.md"
+  },
+  {
+    "id": "phase-6/quiz/week-3-real-users",
+    "phase": 6,
+    "week": 3,
+    "type": "quiz",
+    "title": "Week 3 Quiz — Real users",
+    "path": "phase-6-real-product/quizzes/week-3-real-users-quiz.md"
+  },
+  {
+    "id": "phase-6/lesson/week-4",
+    "phase": 6,
+    "week": 4,
+    "type": "lesson",
+    "title": "Week 4 — Real features",
+    "path": "phase-6-real-product/lessons.md"
+  },
+  {
+    "id": "phase-6/quiz/week-4-real-features",
+    "phase": 6,
+    "week": 4,
+    "type": "quiz",
+    "title": "Week 4 Quiz — Real features",
+    "path": "phase-6-real-product/quizzes/week-4-real-features-quiz.md"
+  },
+  {
+    "id": "phase-6/lesson/week-5",
+    "phase": 6,
+    "week": 5,
+    "type": "lesson",
+    "title": "Week 5 — Polish & retro",
+    "path": "phase-6-real-product/lessons.md"
+  },
+  {
+    "id": "phase-6/quiz/week-5-polish-retro",
+    "phase": 6,
+    "week": 5,
+    "type": "quiz",
+    "title": "Week 5 Quiz — Polish & retro",
+    "path": "phase-6-real-product/quizzes/week-5-polish-retro-quiz.md"
+  },
+  {
+    "id": "phase-7/lesson/week-1",
+    "phase": 7,
+    "week": 1,
+    "type": "lesson",
+    "title": "Week 1 — LLM basics",
+    "path": "phase-7-ai/lessons.md"
+  },
+  {
+    "id": "phase-7/quiz/week-1-llm-basics",
+    "phase": 7,
+    "week": 1,
+    "type": "quiz",
+    "title": "Week 1 Quiz — LLM basics",
+    "path": "phase-7-ai/quizzes/week-1-llm-basics-quiz.md"
+  },
+  {
+    "id": "phase-7/lesson/week-2",
+    "phase": 7,
+    "week": 2,
+    "type": "lesson",
+    "title": "Week 2 — RAG",
+    "path": "phase-7-ai/lessons.md"
+  },
+  {
+    "id": "phase-7/quiz/week-2-rag",
+    "phase": 7,
+    "week": 2,
+    "type": "quiz",
+    "title": "Week 2 Quiz — RAG",
+    "path": "phase-7-ai/quizzes/week-2-rag-quiz.md"
+  },
+  {
+    "id": "phase-7/lesson/week-3",
+    "phase": 7,
+    "week": 3,
+    "type": "lesson",
+    "title": "Week 3 — Tools, evals, safety",
+    "path": "phase-7-ai/lessons.md"
+  },
+  {
+    "id": "phase-7/quiz/week-3-tools-evals-safety",
+    "phase": 7,
+    "week": 3,
+    "type": "quiz",
+    "title": "Week 3 Quiz — Tools, evals, safety",
+    "path": "phase-7-ai/quizzes/week-3-tools-evals-safety-quiz.md"
+  },
+  {
+    "id": "phase-7/lesson/week-4",
+    "phase": 7,
+    "week": 4,
+    "type": "lesson",
+    "title": "Week 4 — Capstone ship",
+    "path": "phase-7-ai/lessons.md"
+  },
+  {
+    "id": "phase-7/quiz/week-4-capstone-ship",
+    "phase": 7,
+    "week": 4,
+    "type": "quiz",
+    "title": "Week 4 Quiz — Capstone ship",
+    "path": "phase-7-ai/quizzes/week-4-capstone-ship-quiz.md"
+  }
+] ;
+
+    // -----------------------------------------------------------
+    // 2. State + Supabase client
+    // -----------------------------------------------------------
+    let supabase = null;
+    let session = null;
+    const progress = new Map();   // item_id -> { completed_at, quiz_score }
+
+    function isSupabaseConfigured() {
+      return SUPABASE_CONFIG.url && SUPABASE_CONFIG.url !== 'YOUR_SUPABASE_URL'
+          && SUPABASE_CONFIG.anonKey && SUPABASE_CONFIG.anonKey !== 'YOUR_SUPABASE_ANON_KEY';
+    }
+
+    async function initSupabase() {
+      // Wait for the ESM client to load
+      let tries = 0;
+      while (!window.__createSupabaseClient && tries < 50) {
+        await new Promise(r => setTimeout(r, 50));
+        tries++;
+      }
+      if (!window.__createSupabaseClient) {
+        console.error('Supabase client failed to load');
+        return false;
+      }
+      supabase = window.__createSupabaseClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+      });
+
+      // Get current session
+      const { data: { session: s } } = await supabase.auth.getSession();
+      session = s;
+
+      supabase.auth.onAuthStateChange((event, newSession) => {
+        session = newSession;
+        renderAuthState();
+        if (session) {
+          loadProgress().then(renderAll);
+        } else {
+          progress.clear();
+          renderAll();
+        }
+      });
+
+      return true;
+    }
+
+    async function signIn() {
+      if (!supabase) {
+        alert('Supabase not configured. See supabase/setup.md.');
+        return;
+      }
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'github',
+        options: { redirectTo: window.location.origin + window.location.pathname },
+      });
+      if (error) console.error(error);
+    }
+
+    async function signOut() {
+      if (!supabase) return;
+      await supabase.auth.signOut();
+    }
+
+    async function loadProgress() {
+      if (!session) return;
+      const { data, error } = await supabase
+        .from('progress')
+        .select('item_id, completed_at, quiz_score');
+      if (error) {
+        console.error('loadProgress:', error);
+        return;
+      }
+      progress.clear();
+      for (const row of data) {
+        progress.set(row.item_id, { completed_at: row.completed_at, quiz_score: row.quiz_score });
+      }
+    }
+
+    async function toggleItem(itemId, isComplete, quizScore) {
+      if (!session) return;
+      if (isComplete) {
+        const payload = { user_id: session.user.id, item_id: itemId, item_type: itemId.includes('/quiz/') ? 'quiz' : 'lesson' };
+        if (quizScore != null) payload.quiz_score = quizScore;
+        const { error } = await supabase.from('progress').upsert(payload, { onConflict: 'user_id,item_id' });
+        if (error) { console.error(error); return; }
+        progress.set(itemId, { completed_at: new Date().toISOString(), quiz_score: quizScore ?? null });
+      } else {
+        const { error } = await supabase.from('progress').delete().match({ user_id: session.user.id, item_id: itemId });
+        if (error) { console.error(error); return; }
+        progress.delete(itemId);
+      }
+      renderProgressStats();
+      renderPhaseListProgress();
+    }
+
+    async function exportProgress() {
+      if (!session) return;
+      const blob = new Blob([JSON.stringify(Object.fromEntries(progress), null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'prince-progress.json'; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    async function confirmReset() {
+      if (!session) return;
+      if (!confirm('Wipe ALL your progress? This cannot be undone.')) return;
+      const { error } = await supabase.from('progress').delete().eq('user_id', session.user.id);
+      if (error) { console.error(error); return; }
+      progress.clear();
+      renderAll();
+    }
+
+    // -----------------------------------------------------------
+    // 3. Rendering
+    // -----------------------------------------------------------
+    function renderAuthState() {
+      const signInBtn = document.getElementById('signInBtn');
+      const userMenu = document.getElementById('userMenu');
+      const dashboard = document.getElementById('dashboard');
+      const signedOutBanner = document.getElementById('signedOutBanner');
+      const setupBanner = document.getElementById('setupBanner');
+
+      if (!isSupabaseConfigured()) {
+        setupBanner.classList.remove('hidden');
+        signedOutBanner.classList.add('hidden');
+        dashboard.classList.add('hidden');
+        signInBtn.classList.add('hidden');
+        userMenu.classList.add('hidden');
+        return;
+      }
+      setupBanner.classList.add('hidden');
+
+      if (session) {
+        userMenu.classList.remove('hidden');
+        signInBtn.classList.add('hidden');
+        dashboard.classList.remove('hidden');
+        signedOutBanner.classList.add('hidden');
+        const u = session.user;
+        const meta = u.user_metadata || {};
+        document.getElementById('userAvatar').src = meta.avatar_url || '';
+        document.getElementById('userName').textContent = meta.user_name || meta.name || u.email;
+        document.getElementById('dashEmail').textContent = u.email || meta.user_name || 'logged in';
+      } else {
+        userMenu.classList.add('hidden');
+        signInBtn.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+        signedOutBanner.classList.remove('hidden');
+      }
+    }
+
+    function toggleUserMenu() {
+      const d = document.getElementById('userDropdown');
+      d.classList.toggle('hidden');
+    }
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('userMenu');
+      if (menu && !menu.contains(e.target)) {
+        document.getElementById('userDropdown')?.classList.add('hidden');
+      }
+    });
+
+    function renderProgressStats() {
+      const total = ITEMS.length;
+      const done = ITEMS.filter(i => progress.has(i.id)).length;
+      const pct = total ? Math.round(100 * done / total) : 0;
+      document.getElementById('dashTotal').textContent = total;
+      document.getElementById('dashDone').textContent = done;
+      document.getElementById('dashPct').textContent = pct + '%';
+      document.getElementById('dashBar').style.width = pct + '%';
+
+      // Per-phase mini-bars
+      const phaseBars = document.getElementById('phaseMiniBars');
+      phaseBars.innerHTML = PHASES.map(p => {
+        const phaseItems = ITEMS.filter(i => i.phase === p.num);
+        const phaseDone = phaseItems.filter(i => progress.has(i.id)).length;
+        const phasePct = phaseItems.length ? Math.round(100 * phaseDone / phaseItems.length) : 0;
+        const accent = accentBg(p.accent);
+        return `
+          <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium">${p.emoji} P${p.num}</span>
+              <span class="text-slate-500">${phaseDone}/${phaseItems.length}</span>
+            </div>
+            <div class="mt-2 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+              <div class="h-full ${accent} transition-all duration-500" style="width:${phasePct}%"></div>
+            </div>
+          </div>`;
+      }).join('');
+
+      // Next up — first incomplete item in phase order
+      const next = ITEMS.find(i => !progress.has(i.id));
+      const nextUp = document.getElementById('nextUp');
+      if (next) {
+        nextUp.classList.remove('hidden');
+        document.getElementById('nextUpLink').textContent = next.title;
+        document.getElementById('nextUpLink').href = next.path;
+        document.getElementById('nextUpJump').href = `#phase-${next.phase}`;
+      } else if (done > 0) {
+        nextUp.classList.remove('hidden');
+        document.getElementById('nextUpLink').textContent = '🎯 You finished everything. Time to ship the capstone.';
+        document.getElementById('nextUpLink').href = 'phase-7-ai/README.md';
+      } else {
+        nextUp.classList.add('hidden');
+      }
+    }
+
+    function accentBg(accent) {
+      return {
+        slate:'bg-slate-500', sky:'bg-sky-500', emerald:'bg-emerald-500',
+        violet:'bg-violet-500', fuchsia:'bg-fuchsia-500', orange:'bg-orange-500',
+        red:'bg-rose-500', amber:'bg-amber-500',
+      }[accent] || 'bg-slate-500';
+    }
+    function accentRing(accent) {
+      return {
+        slate:'ring-slate-300/40 dark:ring-slate-700/60',
+        sky:'ring-sky-400/40', emerald:'ring-emerald-400/40',
+        violet:'ring-violet-400/40', fuchsia:'ring-fuchsia-400/40',
+        orange:'ring-orange-400/40', red:'ring-rose-400/40', amber:'ring-amber-400/40',
+      }[accent] || 'ring-slate-300/40';
+    }
+
+    function renderPhaseList() {
+      const root = document.getElementById('phaseList');
+      root.innerHTML = PHASES.map(p => {
+        const phaseItems = ITEMS.filter(i => i.phase === p.num);
+        const phaseDone = phaseItems.filter(i => progress.has(i.id)).length;
+        const phasePct = phaseItems.length ? Math.round(100 * phaseDone / phaseItems.length) : 0;
+
+        // Group items by week
+        const byWeek = {};
+        for (const it of phaseItems) {
+          const w = it.week || 1;
+          (byWeek[w] = byWeek[w] || []).push(it);
+        }
+        const weekKeys = Object.keys(byWeek).sort((a, b) => +a - +b);
+
+        return `
+          <details id="phase-${p.num}" class="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 ring-1 ${accentRing(p.accent)} overflow-hidden">
+            <summary class="card-lift p-5 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-4 min-w-0">
+                <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${accentBg(p.accent)} text-white font-bold">${p.num}</span>
+                <div class="min-w-0">
+                  <div class="text-xs uppercase tracking-wide text-slate-500">${p.weeks}</div>
+                  <h3 class="font-semibold leading-tight truncate">${p.emoji} ${p.title}</h3>
+                  <p class="text-xs text-slate-500 mt-0.5 truncate">${p.summary}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 shrink-0">
+                <div class="hidden sm:flex flex-col items-end">
+                  <div class="text-xs text-slate-500"><span class="phase-progress-text">${phaseDone}</span>/${phaseItems.length}</div>
+                  <div class="mt-1 w-28 h-1.5 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
+                    <div class="phase-progress-bar h-full ${accentBg(p.accent)} transition-all duration-500" data-phase="${p.num}" style="width:${phasePct}%"></div>
+                  </div>
+                </div>
+                <svg class="chevron h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+              </div>
+            </summary>
+            <div class="border-t border-slate-200 dark:border-slate-800">
+              ${weekKeys.map(w => `
+                <div class="border-b border-slate-100 dark:border-slate-800 last:border-b-0">
+                  ${weekKeys.length > 1 ? `<div class="bg-slate-50 dark:bg-slate-900/50 px-5 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Week ${w}</div>` : ''}
+                  <ul>
+                    ${byWeek[w].map(it => renderItemRow(it)).join('')}
+                  </ul>
+                </div>
+              `).join('')}
+            </div>
+          </details>
+        `;
+      }).join('');
+
+      // Bind checkbox handlers
+      root.querySelectorAll('input[type=checkbox][data-item-id]').forEach(cb => {
+        cb.addEventListener('change', (e) => {
+          const itemId = e.target.dataset.itemId;
+          toggleItem(itemId, e.target.checked, null);
+        });
+      });
+    }
+
+    function renderItemRow(it) {
+      const done = progress.has(it.id);
+      const score = progress.get(it.id)?.quiz_score;
+      const canCheck = !!session;
+      const typeBadge = it.type === 'quiz'
+        ? '<span class="text-[10px] font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 rounded px-1.5 py-0.5">Quiz</span>'
+        : '<span class="text-[10px] font-semibold uppercase tracking-wide text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/30 rounded px-1.5 py-0.5">Lesson</span>';
+
+      return `
+        <li class="item-row flex items-center gap-3 px-5 py-2.5 ${done ? 'opacity-60' : ''}">
+          ${canCheck
+            ? `<input type="checkbox" data-item-id="${it.id}" ${done ? 'checked' : ''} class="h-4 w-4 rounded border-slate-300 dark:border-slate-700 text-brand-500 focus:ring-brand-500" />`
+            : `<span class="h-4 w-4 rounded border border-slate-300 dark:border-slate-700 inline-block" title="Sign in to track"></span>`
+          }
+          ${typeBadge}
+          <a href="${it.path}" class="text-sm flex-1 truncate hover:text-brand-500 transition ${done ? 'line-through' : ''}">${it.title}</a>
+          ${score != null ? `<span class="text-xs font-mono text-slate-500">${score}%</span>` : ''}
+        </li>
+      `;
+    }
+
+    function renderPhaseListProgress() {
+      // Update phase progress bars without full re-render
+      for (const p of PHASES) {
+        const phaseItems = ITEMS.filter(i => i.phase === p.num);
+        const phaseDone = phaseItems.filter(i => progress.has(i.id)).length;
+        const phasePct = phaseItems.length ? Math.round(100 * phaseDone / phaseItems.length) : 0;
+        const bar = document.querySelector(`.phase-progress-bar[data-phase="${p.num}"]`);
+        if (bar) {
+          bar.style.width = phasePct + '%';
+          const text = bar.closest('summary')?.querySelector('.phase-progress-text');
+          if (text) text.textContent = phaseDone;
+        }
+      }
+    }
+
+    function renderAll() {
+      renderAuthState();
+      if (session && isSupabaseConfigured()) {
+        renderProgressStats();
+      }
+      renderPhaseList();
+    }
+
+    // -----------------------------------------------------------
+    // 4. Theme
+    // -----------------------------------------------------------
     function setTheme(t) {
       const html = document.documentElement;
       if (t === 'dark') html.classList.add('dark'); else html.classList.remove('dark');
       try { localStorage.setItem('theme', t); } catch (e) {}
     }
     function toggleTheme() {
-      const isDark = document.documentElement.classList.contains('dark');
-      setTheme(isDark ? 'light' : 'dark');
+      setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
     }
-    // restore on load
-    (function () {
-      try {
-        const t = localStorage.getItem('theme');
-        if (t === 'light') setTheme('light');
-      } catch (e) {}
+    try {
+      const t = localStorage.getItem('theme');
+      if (t === 'light') setTheme('light');
+    } catch (e) {}
+
+    // -----------------------------------------------------------
+    // 5. Boot
+    // -----------------------------------------------------------
+    (async function boot() {
+      if (isSupabaseConfigured()) {
+        await initSupabase();
+        if (session) await loadProgress();
+      }
+      renderAll();
     })();
-
-    // ---------- phase data ----------
-    const PHASES = [
-      {
-        num: 0,
-        title: 'Setup & Habits',
-        weeks: '1 week',
-        emoji: '🛠️',
-        accent: 'slate',
-        summary: 'Terminal, git, GitHub. Daily commit habit. Type 40+ wpm.',
-        lessons: 5,
-        quizzes: 1,
-        projectName: 'learning-log',
-        projectKind: 'public GitHub repo',
-        path: 'phase-0-setup/',
-        startLink: 'phase-0-setup/lessons/01-install.md',
-        topics: ['Terminal basics', 'Git fundamentals', 'SSH + GitHub', 'PRs', 'Habits & typing'],
-      },
-      {
-        num: 1,
-        title: 'Python & CLI',
-        weeks: '5 weeks',
-        emoji: '🐍',
-        accent: 'sky',
-        summary: 'Real Python with types, tests, classes. Ship two installable CLI tools.',
-        lessons: 25,
-        quizzes: 24,
-        projectName: 'english-helper + pomo',
-        projectKind: 'two CLI tools',
-        path: 'phase-1-python-cli/',
-        startLink: 'phase-1-python-cli/lessons/00-setup-environment.md',
-        topics: ['Variables, types, functions', 'OOP & dataclasses', 'pytest & TDD', 'API integration', 'CLI packaging'],
-      },
-      {
-        num: 2,
-        title: 'Web & SQL',
-        weeks: '4 weeks',
-        emoji: '🌐',
-        accent: 'emerald',
-        summary: 'HTML, CSS, Tailwind, HTTP, browser devtools, real SQL.',
-        lessons: 4,
-        quizzes: 4,
-        projectName: 'portfolio + 50 SQL katas',
-        projectKind: 'deployed static site',
-        path: 'phase-2-web-sql/',
-        startLink: 'phase-2-web-sql/lessons.md',
-        topics: ['HTML & semantic markup', 'Tailwind CSS', 'HTTP & fetch', 'SQL fundamentals'],
-      },
-      {
-        num: 3,
-        title: 'FastAPI Backend',
-        weeks: '6 weeks',
-        emoji: '⚡',
-        accent: 'violet',
-        summary: 'A real REST API: auth with JWT, Postgres, tests, Docker.',
-        lessons: 6,
-        quizzes: 6,
-        projectName: 'questly',
-        projectKind: 'authenticated API',
-        path: 'phase-3-fastapi/',
-        startLink: 'phase-3-fastapi/lessons.md',
-        topics: ['FastAPI + Pydantic', 'SQLAlchemy 2.0', 'JWT auth + argon2', 'Testing with mocks', 'Multi-stage Docker'],
-      },
-      {
-        num: 4,
-        title: 'TypeScript & Next.js',
-        weeks: '6 weeks',
-        emoji: '⚛️',
-        accent: 'fuchsia',
-        summary: 'A typed full-stack app: server components, forms, optimistic UI.',
-        lessons: 6,
-        quizzes: 6,
-        projectName: 'questly-web',
-        projectKind: 'deployed Next.js app',
-        path: 'phase-4-typescript-nextjs/',
-        startLink: 'phase-4-typescript-nextjs/lessons.md',
-        topics: ['TypeScript strict', 'React fundamentals', 'Next.js App Router', 'Auth + forms + zod', 'shadcn/ui', 'Playwright E2E'],
-      },
-      {
-        num: 5,
-        title: 'Deploy & Networking',
-        weeks: '4 weeks',
-        emoji: '🌍',
-        accent: 'orange',
-        summary: 'Your own VPS. HTTPS. CI/CD. Backups. The site is live and yours.',
-        lessons: 4,
-        quizzes: 4,
-        projectName: 'production deploy',
-        projectKind: 'real domain, real server',
-        path: 'phase-5-deploy-vps/',
-        startLink: 'phase-5-deploy-vps/lessons.md',
-        topics: ['Linux + ssh hardening', 'DNS + Cloudflare', 'nginx + TLS', 'CI/CD + tagged releases', 'Backups + runbook'],
-      },
-      {
-        num: 6,
-        title: 'Real Product',
-        weeks: '5 weeks',
-        emoji: '🎁',
-        accent: 'red',
-        summary: 'Build something for real people. Get 3+ users in week 4.',
-        lessons: 5,
-        quizzes: 5,
-        projectName: 'your product',
-        projectKind: 'real users, real lifecycle',
-        path: 'phase-6-real-product/',
-        startLink: 'phase-6-real-product/lessons.md',
-        topics: ['Pick a real problem', 'Ship MVP fast', 'Real-user feedback loop', 'Add prod features', 'Polish + retro'],
-      },
-      {
-        num: 7,
-        title: 'AI Capstone',
-        weeks: '4 weeks',
-        emoji: '🤖',
-        accent: 'amber',
-        summary: 'Add an AI feature with evals, cost discipline, and prompt-injection defense.',
-        lessons: 4,
-        quizzes: 4,
-        projectName: 'AI feature',
-        projectKind: 'capstone — laptop ships',
-        path: 'phase-7-ai/',
-        startLink: 'phase-7-ai/lessons.md',
-        topics: ['LLM API + caching', 'RAG with pgvector', 'Tool use + evals', 'Capstone ship & retro'],
-      },
-    ];
-
-    // ---------- Phase card render ----------
-    function phaseCard(p) {
-      const ringAccent = {
-        slate:    'ring-slate-300/40 dark:ring-slate-700/60',
-        sky:      'ring-sky-400/40',
-        emerald:  'ring-emerald-400/40',
-        violet:   'ring-violet-400/40',
-        fuchsia:  'ring-fuchsia-400/40',
-        orange:   'ring-orange-400/40',
-        red:      'ring-rose-400/40',
-        amber:    'ring-amber-400/40',
-      }[p.accent] || 'ring-slate-300/40';
-
-      const badgeBg = {
-        slate:    'bg-slate-500',
-        sky:      'bg-sky-500',
-        emerald:  'bg-emerald-500',
-        violet:   'bg-violet-500',
-        fuchsia:  'bg-fuchsia-500',
-        orange:   'bg-orange-500',
-        red:      'bg-rose-500',
-        amber:    'bg-amber-500',
-      }[p.accent] || 'bg-slate-500';
-
-      const isCapstone = p.num === 7;
-
-      return `
-        <article class="card-lift group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 ring-1 ${ringAccent} ${isCapstone ? 'lg:row-span-1 ring-2' : ''}">
-          <header class="flex items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl ${badgeBg} text-white font-bold tracking-tight">
-                ${p.num}
-              </span>
-              <div>
-                <div class="text-xs uppercase tracking-wide text-slate-500">${p.weeks}</div>
-                <h3 class="font-semibold text-base leading-tight">${p.emoji} ${p.title}</h3>
-              </div>
-            </div>
-          </header>
-
-          <p class="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-            ${p.summary}
-          </p>
-
-          <ul class="mt-4 space-y-1 text-xs text-slate-500">
-            ${p.topics.map(t => `<li class="flex items-center gap-2"><span class="h-1 w-1 rounded-full ${badgeBg}"></span>${t}</li>`).join('')}
-          </ul>
-
-          <div class="mt-5 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-4">
-            <div>
-              <span class="font-semibold text-slate-700 dark:text-slate-300">${p.lessons}</span> lesson${p.lessons===1?'':'s'} ·
-              <span class="font-semibold text-slate-700 dark:text-slate-300">${p.quizzes}</span> quiz${p.quizzes===1?'':'zes'}
-            </div>
-          </div>
-
-          <div class="mt-4 flex flex-wrap gap-2">
-            <a href="${p.path}README.md" class="inline-flex items-center gap-1 text-xs font-medium rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 px-3 py-1.5 transition">
-              Overview
-            </a>
-            <a href="${p.startLink}" class="inline-flex items-center gap-1 text-xs font-medium rounded-md ${badgeBg} hover:opacity-90 text-white px-3 py-1.5 transition">
-              Start
-              <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-            </a>
-          </div>
-
-          <div class="mt-3 text-[11px] text-slate-400">
-            Builds: <span class="font-mono text-slate-500 dark:text-slate-400">${p.projectName}</span>
-          </div>
-        </article>
-      `;
-    }
-
-    document.getElementById('phaseGrid').innerHTML = PHASES.map(phaseCard).join('');
   </script>
 
 </body>
