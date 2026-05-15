@@ -1,5 +1,7 @@
 # Project Prince — A 9-Month Path to Becoming a Real Programmer
 
+**🌐 Live site:** [jakkzz.github.io/prince-curriculum](https://jakkzz.github.io/prince-curriculum/)
+
 A complete, project-based curriculum that takes a beginner from zero to shipping a production AI-powered web app on their own infrastructure.
 
 ## Who this is for
