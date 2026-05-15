@@ -53,7 +53,7 @@ Every phase contains:
 
 Configured at the start of the course (Apple Silicon RAM/SSD are not user-upgradable):
 
-- **Hardware spec baseline:** MacBook Air 2026, 16 GB RAM / 512 GB SSD. This is the working floor for the curriculum.
+- **Hardware:** MacBook Air M5, 32 GB unified memory / 1 TB SSD. Real spec — the same machine senior engineers buy themselves.
 - **Awarded at:** Phase 7 capstone shipped with real users and a written design doc.
 - **Adjacent rewards at milestones:** discussed with the mentor; earned at each phase gate.
 
