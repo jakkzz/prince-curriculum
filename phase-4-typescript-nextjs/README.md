@@ -62,3 +62,16 @@ End of Week 4. See [quiz.md](quiz.md).
 - Are forms validated on both client AND server?
 - Does the app work without JavaScript (where reasonable)?
 - Is loading + error + empty state handled, or just the happy path?
+
+## Weekly quizzes
+
+| Week | Topic | Quiz |
+|------|-------|------|
+| 1 | TypeScript | [week-1-typescript-quiz.md](quizzes/week-1-typescript-quiz.md) |
+| 2 | React fundamentals | [week-2-react-quiz.md](quizzes/week-2-react-quiz.md) |
+| 3 | Next.js App Router | [week-3-nextjs-app-router-quiz.md](quizzes/week-3-nextjs-app-router-quiz.md) |
+| 4 | Auth, data, forms | [week-4-auth-data-forms-quiz.md](quizzes/week-4-auth-data-forms-quiz.md) |
+| 5 | shadcn/ui & design | [week-5-shadcn-design-quiz.md](quizzes/week-5-shadcn-design-quiz.md) |
+| 6 | Playwright & deploy | [week-6-playwright-deploy-quiz.md](quizzes/week-6-playwright-deploy-quiz.md) |
+
+Each week: 20–28 questions in 5 sections (MCQ, predict output, fill in code, debug, write code). Self-grading rubric at the end. Take at end of each week before moving to the next.

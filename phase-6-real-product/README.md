@@ -65,3 +65,15 @@ Pick **one**. Mentor approval required.
 - Do they have **real user feedback**, or are they guessing?
 - Are they keeping the scope small enough to ship, or padding the feature list?
 - When something broke, did they write it down?
+
+## Weekly quizzes
+
+| Week | Topic | Quiz |
+|------|-------|------|
+| 1 | Pick, design, scope | [week-1-design-scope-quiz.md](quizzes/week-1-design-scope-quiz.md) |
+| 2 | Ship the MVP | [week-2-ship-mvp-quiz.md](quizzes/week-2-ship-mvp-quiz.md) |
+| 3 | Real users & iterate | [week-3-real-users-quiz.md](quizzes/week-3-real-users-quiz.md) |
+| 4 | Real features | [week-4-real-features-quiz.md](quizzes/week-4-real-features-quiz.md) |
+| 5 | Polish & retro | [week-5-polish-retro-quiz.md](quizzes/week-5-polish-retro-quiz.md) |
+
+Each week: 20–28 questions in 5 sections (MCQ, predict output, fill in code, debug, write code). Self-grading rubric at the end. Take at end of each week before moving to the next.

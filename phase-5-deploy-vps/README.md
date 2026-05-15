@@ -71,3 +71,14 @@ End of Week 3. See [quiz.md](quiz.md).
 - Did they install the firewall AFTER blocking themselves out of ssh? (You will.)
 - Did they set up systemd correctly, or just `nohup`/`tmux` it?
 - Can they read journalctl output and find the real error?
+
+## Weekly quizzes
+
+| Week | Topic | Quiz |
+|------|-------|------|
+| 1 | VPS & Linux fundamentals | [week-1-vps-linux-quiz.md](quizzes/week-1-vps-linux-quiz.md) |
+| 2 | DNS, nginx, TLS, Cloudflare | [week-2-dns-nginx-tls-quiz.md](quizzes/week-2-dns-nginx-tls-quiz.md) |
+| 3 | Deploy, CI/CD, backups | [week-3-deploy-ci-backups-quiz.md](quizzes/week-3-deploy-ci-backups-quiz.md) |
+| 4 | Production polish & runbook | [week-4-production-runbook-quiz.md](quizzes/week-4-production-runbook-quiz.md) |
+
+Each week: 20–28 questions in 5 sections (MCQ, predict output, fill in code, debug, write code). Self-grading rubric at the end. Take at end of each week before moving to the next.

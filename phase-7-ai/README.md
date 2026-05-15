@@ -62,3 +62,14 @@ End of Phase 7 is also the end of the course. See [retrospective.md](retrospecti
 - Do they treat the AI feature as a feature, or as the entire product?
 - Can they explain every line of AI-assisted code they shipped?
 - Do they handle the "AI hallucinated" case gracefully in the UI?
+
+## Weekly quizzes
+
+| Week | Topic | Quiz |
+|------|-------|------|
+| 1 | LLM basics | [week-1-llm-basics-quiz.md](quizzes/week-1-llm-basics-quiz.md) |
+| 2 | RAG | [week-2-rag-quiz.md](quizzes/week-2-rag-quiz.md) |
+| 3 | Tools, evals, safety | [week-3-tools-evals-safety-quiz.md](quizzes/week-3-tools-evals-safety-quiz.md) |
+| 4 | Capstone ship | [week-4-capstone-ship-quiz.md](quizzes/week-4-capstone-ship-quiz.md) |
+
+Each week: 20–28 questions in 5 sections (MCQ, predict output, fill in code, debug, write code). Self-grading rubric at the end. Take at end of each week before moving to the next.

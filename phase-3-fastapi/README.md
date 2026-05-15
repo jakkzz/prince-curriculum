@@ -61,3 +61,16 @@ End of Week 4. See [quiz.md](quiz.md).
 - Did they hash the password? (Demand to see it.)
 - Are they catching exceptions to silence them, or to handle them?
 - Do they understand the difference between "the request was bad" (4xx) and "the server is broken" (5xx)?
+
+## Weekly quizzes
+
+| Week | Topic | Quiz |
+|------|-------|------|
+| 1 | FastAPI fundamentals | [week-1-fastapi-fundamentals-quiz.md](quizzes/week-1-fastapi-fundamentals-quiz.md) |
+| 2 | SQLAlchemy & database | [week-2-sqlalchemy-quiz.md](quizzes/week-2-sqlalchemy-quiz.md) |
+| 3 | Authentication | [week-3-auth-quiz.md](quizzes/week-3-auth-quiz.md) |
+| 4 | Testing | [week-4-testing-quiz.md](quizzes/week-4-testing-quiz.md) |
+| 5 | Production concerns | [week-5-production-quiz.md](quizzes/week-5-production-quiz.md) |
+| 6 | Docker & ship | [week-6-docker-ship-quiz.md](quizzes/week-6-docker-ship-quiz.md) |
+
+Each week: 20–28 questions in 5 sections (MCQ, predict output, fill in code, debug, write code). Self-grading rubric at the end. Take at end of each week before moving to the next.
