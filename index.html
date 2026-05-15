@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Prince — A 35-Week Path to Real Software</title>
+  <meta name="description" content="A 9-month project-based curriculum: Python, TypeScript, FastAPI, Next.js, SQL, Linux deployment, and AI. Capstone: ship a real product with real users." />
+  <meta property="og:title" content="Project Prince" />
+  <meta property="og:description" content="A 9-month curriculum that takes a beginner from zero to shipping a real AI-powered web app on their own infrastructure." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52'%3E%F0%9F%8E%AF%3C/text%3E%3C/svg%3E" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50:  '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root { color-scheme: dark light; }
+    html { scroll-behavior: smooth; }
+    body { font-feature-settings: 'cv11', 'ss01'; }
+
+    /* Gradient mesh background */
+    .mesh {
+      background-image:
+        radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.10) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(34, 197, 94, 0.08) 0px, transparent 50%);
+    }
+
+    /* Subtle card lift on hover */
+    .card-lift { transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease; }
+    .card-lift:hover { transform: translateY(-2px); }
+
+    /* Animated dotted progress */
+    @keyframes pulse-slow { 0%,100% { opacity: 1 } 50% { opacity: 0.5 } }
+    .pulse-slow { animation: pulse-slow 2s infinite; }
+
+    /* Print: drop everything that won't render well on paper */
+    @media print {
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans antialiased min-h-screen">
+
+  <!-- =========================================================
+       NAV
+       ========================================================= -->
+  <header class="sticky top-0 z-30 backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border-b border-slate-200 dark:border-slate-800 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex h-14 items-center justify-between">
+        <a href="#top" class="flex items-center gap-2 font-semibold tracking-tight">
+          <span class="inline-flex h-7 w-7 items-center justify-center rounded-md bg-brand-500 text-white text-sm">🎯</span>
+          <span>Project Prince</span>
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm">
+          <a class="hover:text-brand-500 transition" href="#phases">Phases</a>
+          <a class="hover:text-brand-500 transition" href="#how">How to use</a>
+          <a class="hover:text-brand-500 transition" href="#rules">The rules</a>
+          <a class="hover:text-brand-500 transition" href="#reward">Reward</a>
+          <a class="hover:text-brand-500 transition" href="https://github.com/jakkzz/prince-curriculum" target="_blank" rel="noreferrer">
+            <svg class="inline-block h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.86 8.37 6.84 9.72.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.36-3.37-1.36-.46-1.18-1.11-1.5-1.11-1.5-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.35-1.1.63-1.36-2.22-.26-4.55-1.13-4.55-5.02 0-1.11.39-2.02 1.03-2.74-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.42 9.42 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.74 0 3.9-2.34 4.76-4.57 5.02.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.59.69.49C19.14 20.62 22 16.78 22 12.25 22 6.58 17.52 2 12 2z"/></svg>
+            GitHub
+          </a>
+        </div>
+        <button
+          onclick="toggleTheme()"
+          aria-label="Toggle theme"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+        >
+          <svg id="iconSun" class="h-4 w-4 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg id="iconMoon" class="h-4 w-4 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- =========================================================
+       HERO
+       ========================================================= -->
+  <section id="top" class="relative mesh">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div class="max-w-3xl">
+        <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 px-3 py-1 text-xs font-medium text-slate-600 dark:text-slate-400">
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 pulse-slow"></span>
+          35 weeks · 8 phases · 1 capstone
+        </span>
+        <h1 class="mt-6 text-4xl sm:text-6xl font-extrabold tracking-tight">
+          Build real things.<br/>
+          <span class="bg-gradient-to-r from-brand-500 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">Become a real programmer.</span>
+        </h1>
+        <p class="mt-6 text-lg text-slate-600 dark:text-slate-400 max-w-2xl">
+          A 9-month project-based curriculum that takes a beginner from <em>"what's a terminal"</em>
+          to shipping a real AI-powered web app on their own server, used by real people.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="#phases"
+             class="inline-flex items-center gap-2 rounded-lg bg-brand-500 hover:bg-brand-600 text-white font-medium px-5 py-2.5 transition shadow-sm">
+            Start with Phase 0
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#how"
+             class="inline-flex items-center gap-2 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900 font-medium px-5 py-2.5 transition">
+            How to use this
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats strip -->
+      <dl class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
+          <dt class="text-xs uppercase tracking-wide text-slate-500">Weeks</dt>
+          <dd class="mt-1 text-3xl font-bold">35</dd>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
+          <dt class="text-xs uppercase tracking-wide text-slate-500">Lessons</dt>
+          <dd class="mt-1 text-3xl font-bold">60+</dd>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
+          <dt class="text-xs uppercase tracking-wide text-slate-500">Quiz Qs</dt>
+          <dd class="mt-1 text-3xl font-bold">~1,500</dd>
+        </div>
+        <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40 backdrop-blur p-5">
+          <dt class="text-xs uppercase tracking-wide text-slate-500">Projects shipped</dt>
+          <dd class="mt-1 text-3xl font-bold">8</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       PHASES
+       ========================================================= -->
+  <section id="phases" class="py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">The path</h2>
+        <p class="mt-3 text-slate-600 dark:text-slate-400">
+          Eight phases, one after the other. Each ends with a <strong>gate</strong> — a live demonstration with the mentor.
+          You don't move to the next phase until you can do the current one unaided.
+        </p>
+      </div>
+
+      <div id="phaseGrid" class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <!-- Phase cards inserted by JS below -->
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       HOW TO USE
+       ========================================================= -->
+  <section id="how" class="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">How to use this</h2>
+        <p class="mt-3 text-slate-600 dark:text-slate-400">
+          A 35-week course is long. The structure exists so you can't get lost.
+        </p>
+      </div>
+
+      <ol class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+        <li class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">1</span>
+            <h3 class="font-semibold">Daily</h3>
+          </div>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            ~3 hours, 6 days/week. Read the lesson, build the mini-project,
+            commit. Every weekday. The streak is the structure.
+          </p>
+        </li>
+        <li class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">2</span>
+            <h3 class="font-semibold">Weekly quiz</h3>
+          </div>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            End of each week: take the quiz (20–35 questions, 5 sections).
+            Below the passing score? Re-read, retake. No moving on until you understand.
+          </p>
+        </li>
+        <li class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-md bg-brand-500/10 text-brand-500 font-semibold">3</span>
+            <h3 class="font-semibold">Friday check-in</h3>
+          </div>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            30 min with your mentor. You demo something running. They pick
+            a file at random; you explain it. Done well = ship it.
+          </p>
+        </li>
+      </ol>
+
+      <div class="mt-6 rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-900/10 p-6">
+        <p class="text-sm text-amber-900 dark:text-amber-200">
+          <strong>The hardest part isn't the code.</strong> It's sitting down on the Tuesday in February
+          when nobody's watching. Build the habit. The rest is downstream.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       THE RULES
+       ========================================================= -->
+  <section id="rules" class="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl">
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">Three rules</h2>
+        <p class="mt-3 text-slate-600 dark:text-slate-400">Non-negotiable.</p>
+      </div>
+
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="rounded-xl border-l-4 border-l-rose-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+          <h3 class="font-semibold flex items-center gap-2">
+            <span class="text-rose-500">🚫</span>
+            No AI in Phases 0–6
+          </h3>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            No Copilot, Cursor, ChatGPT. Phase 7 unlocks AI — by then you'll have the
+            judgment to know when it's wrong. That judgment is the prize.
+          </p>
+        </div>
+
+        <div class="rounded-xl border-l-4 border-l-amber-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+          <h3 class="font-semibold flex items-center gap-2">
+            <span class="text-amber-500">📝</span>
+            Be honest
+          </h3>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            If you don't understand something, say so. The penalty for confusion is zero.
+            The penalty for pretending is week-12 collapse.
+          </p>
+        </div>
+
+        <div class="rounded-xl border-l-4 border-l-emerald-500 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
+          <h3 class="font-semibold flex items-center gap-2">
+            <span class="text-emerald-500">🚀</span>
+            Ship over polish
+          </h3>
+          <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">
+            Done and ugly beats beautiful and unfinished. Every. Single. Time.
+            Ship first, polish after feedback.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       REWARD
+       ========================================================= -->
+  <section id="reward" class="py-16 sm:py-24 border-t border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white via-brand-50/30 to-white dark:from-slate-950 dark:via-brand-900/10 dark:to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl sm:text-4xl font-bold tracking-tight">The reward</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-400">
+            Earned at Phase 7's capstone gate — your AI feature shipped, real users, eval pass rate, design doc.
+          </p>
+
+          <div class="mt-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm">
+            <div class="flex items-start gap-4">
+              <div class="text-5xl">💻</div>
+              <div class="min-w-0">
+                <h3 class="text-2xl font-bold">MacBook Air 2026</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 mt-1">16 GB RAM · 512 GB SSD</p>
+                <p class="mt-3 text-sm text-slate-700 dark:text-slate-300">
+                  Your first real machine for real work. The spec is locked because Apple Silicon RAM/SSD aren't upgradable —
+                  and because the curriculum genuinely needs 16/512 by Phase 5.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-6 text-sm text-slate-500 italic">
+            The laptop isn't the reward. The skill is. The laptop is the receipt.
+          </p>
+        </div>
+
+        <!-- Milestone rewards timeline -->
+        <div>
+          <h3 class="font-semibold text-sm uppercase tracking-wide text-slate-500">Along the way</h3>
+          <ol class="mt-4 relative border-l-2 border-slate-200 dark:border-slate-800 ml-2 space-y-5">
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
+              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 0 gate</div>
+              <div class="font-medium">Mechanical keyboard</div>
+            </li>
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
+              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 1 gate</div>
+              <div class="font-medium">Second monitor</div>
+            </li>
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
+              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 2 gate</div>
+              <div class="font-medium">Your own domain + VPS credit</div>
+            </li>
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
+              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 3 gate</div>
+              <div class="font-medium">Good chair</div>
+            </li>
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
+              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 4 gate</div>
+              <div class="font-medium">Noise-cancel headphones</div>
+            </li>
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
+              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 5 gate</div>
+              <div class="font-medium">Tech learning subscription</div>
+            </li>
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-brand-500"></span>
+              <div class="text-xs uppercase tracking-wide text-slate-500">Phase 6 gate</div>
+              <div class="font-medium">Tech conference OR 1:1 with an engineer</div>
+            </li>
+            <li class="ml-6 pb-1">
+              <span class="absolute -left-[7px] h-3 w-3 rounded-full bg-amber-500"></span>
+              <div class="text-xs uppercase tracking-wide text-amber-600 dark:text-amber-400 font-semibold">Phase 7 capstone</div>
+              <div class="font-bold text-base">MacBook Air 2026 🎯</div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       FOOTER
+       ========================================================= -->
+  <footer class="py-12 border-t border-slate-200 dark:border-slate-800 text-sm text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        Curriculum source ·
+        <a class="hover:text-brand-500" href="https://github.com/jakkzz/prince-curriculum">github.com/jakkzz/prince-curriculum</a>
+      </div>
+      <div class="text-xs text-slate-400">
+        Built by Jakkrit · 35 weeks of work for one good first machine
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       SCRIPTS — phase data + interactions
+       ========================================================= -->
+  <script>
+    // ---------- theme toggle ----------
+    function setTheme(t) {
+      const html = document.documentElement;
+      if (t === 'dark') html.classList.add('dark'); else html.classList.remove('dark');
+      try { localStorage.setItem('theme', t); } catch (e) {}
+    }
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      setTheme(isDark ? 'light' : 'dark');
+    }
+    // restore on load
+    (function () {
+      try {
+        const t = localStorage.getItem('theme');
+        if (t === 'light') setTheme('light');
+      } catch (e) {}
+    })();
+
+    // ---------- phase data ----------
+    const PHASES = [
+      {
+        num: 0,
+        title: 'Setup & Habits',
+        weeks: '1 week',
+        emoji: '🛠️',
+        accent: 'slate',
+        summary: 'Terminal, git, GitHub. Daily commit habit. Type 40+ wpm.',
+        lessons: 5,
+        quizzes: 1,
+        projectName: 'learning-log',
+        projectKind: 'public GitHub repo',
+        path: 'phase-0-setup/',
+        startLink: 'phase-0-setup/lessons/01-install.md',
+        topics: ['Terminal basics', 'Git fundamentals', 'SSH + GitHub', 'PRs', 'Habits & typing'],
+      },
+      {
+        num: 1,
+        title: 'Python & CLI',
+        weeks: '5 weeks',
+        emoji: '🐍',
+        accent: 'sky',
+        summary: 'Real Python with types, tests, classes. Ship two installable CLI tools.',
+        lessons: 25,
+        quizzes: 24,
+        projectName: 'english-helper + pomo',
+        projectKind: 'two CLI tools',
+        path: 'phase-1-python-cli/',
+        startLink: 'phase-1-python-cli/lessons/00-setup-environment.md',
+        topics: ['Variables, types, functions', 'OOP & dataclasses', 'pytest & TDD', 'API integration', 'CLI packaging'],
+      },
+      {
+        num: 2,
+        title: 'Web & SQL',
+        weeks: '4 weeks',
+        emoji: '🌐',
+        accent: 'emerald',
+        summary: 'HTML, CSS, Tailwind, HTTP, browser devtools, real SQL.',
+        lessons: 4,
+        quizzes: 4,
+        projectName: 'portfolio + 50 SQL katas',
+        projectKind: 'deployed static site',
+        path: 'phase-2-web-sql/',
+        startLink: 'phase-2-web-sql/lessons.md',
+        topics: ['HTML & semantic markup', 'Tailwind CSS', 'HTTP & fetch', 'SQL fundamentals'],
+      },
+      {
+        num: 3,
+        title: 'FastAPI Backend',
+        weeks: '6 weeks',
+        emoji: '⚡',
+        accent: 'violet',
+        summary: 'A real REST API: auth with JWT, Postgres, tests, Docker.',
+        lessons: 6,
+        quizzes: 6,
+        projectName: 'questly',
+        projectKind: 'authenticated API',
+        path: 'phase-3-fastapi/',
+        startLink: 'phase-3-fastapi/lessons.md',
+        topics: ['FastAPI + Pydantic', 'SQLAlchemy 2.0', 'JWT auth + argon2', 'Testing with mocks', 'Multi-stage Docker'],
+      },
+      {
+        num: 4,
+        title: 'TypeScript & Next.js',
+        weeks: '6 weeks',
+        emoji: '⚛️',
+        accent: 'fuchsia',
+        summary: 'A typed full-stack app: server components, forms, optimistic UI.',
+        lessons: 6,
+        quizzes: 6,
+        projectName: 'questly-web',
+        projectKind: 'deployed Next.js app',
+        path: 'phase-4-typescript-nextjs/',
+        startLink: 'phase-4-typescript-nextjs/lessons.md',
+        topics: ['TypeScript strict', 'React fundamentals', 'Next.js App Router', 'Auth + forms + zod', 'shadcn/ui', 'Playwright E2E'],
+      },
+      {
+        num: 5,
+        title: 'Deploy & Networking',
+        weeks: '4 weeks',
+        emoji: '🌍',
+        accent: 'orange',
+        summary: 'Your own VPS. HTTPS. CI/CD. Backups. The site is live and yours.',
+        lessons: 4,
+        quizzes: 4,
+        projectName: 'production deploy',
+        projectKind: 'real domain, real server',
+        path: 'phase-5-deploy-vps/',
+        startLink: 'phase-5-deploy-vps/lessons.md',
+        topics: ['Linux + ssh hardening', 'DNS + Cloudflare', 'nginx + TLS', 'CI/CD + tagged releases', 'Backups + runbook'],
+      },
+      {
+        num: 6,
+        title: 'Real Product',
+        weeks: '5 weeks',
+        emoji: '🎁',
+        accent: 'red',
+        summary: 'Build something for real people. Get 3+ users in week 4.',
+        lessons: 5,
+        quizzes: 5,
+        projectName: 'your product',
+        projectKind: 'real users, real lifecycle',
+        path: 'phase-6-real-product/',
+        startLink: 'phase-6-real-product/lessons.md',
+        topics: ['Pick a real problem', 'Ship MVP fast', 'Real-user feedback loop', 'Add prod features', 'Polish + retro'],
+      },
+      {
+        num: 7,
+        title: 'AI Capstone',
+        weeks: '4 weeks',
+        emoji: '🤖',
+        accent: 'amber',
+        summary: 'Add an AI feature with evals, cost discipline, and prompt-injection defense.',
+        lessons: 4,
+        quizzes: 4,
+        projectName: 'AI feature',
+        projectKind: 'capstone — laptop ships',
+        path: 'phase-7-ai/',
+        startLink: 'phase-7-ai/lessons.md',
+        topics: ['LLM API + caching', 'RAG with pgvector', 'Tool use + evals', 'Capstone ship & retro'],
+      },
+    ];
+
+    // ---------- Phase card render ----------
+    function phaseCard(p) {
+      const ringAccent = {
+        slate:    'ring-slate-300/40 dark:ring-slate-700/60',
+        sky:      'ring-sky-400/40',
+        emerald:  'ring-emerald-400/40',
+        violet:   'ring-violet-400/40',
+        fuchsia:  'ring-fuchsia-400/40',
+        orange:   'ring-orange-400/40',
+        red:      'ring-rose-400/40',
+        amber:    'ring-amber-400/40',
+      }[p.accent] || 'ring-slate-300/40';
+
+      const badgeBg = {
+        slate:    'bg-slate-500',
+        sky:      'bg-sky-500',
+        emerald:  'bg-emerald-500',
+        violet:   'bg-violet-500',
+        fuchsia:  'bg-fuchsia-500',
+        orange:   'bg-orange-500',
+        red:      'bg-rose-500',
+        amber:    'bg-amber-500',
+      }[p.accent] || 'bg-slate-500';
+
+      const isCapstone = p.num === 7;
+
+      return `
+        <article class="card-lift group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 ring-1 ${ringAccent} ${isCapstone ? 'lg:row-span-1 ring-2' : ''}">
+          <header class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl ${badgeBg} text-white font-bold tracking-tight">
+                ${p.num}
+              </span>
+              <div>
+                <div class="text-xs uppercase tracking-wide text-slate-500">${p.weeks}</div>
+                <h3 class="font-semibold text-base leading-tight">${p.emoji} ${p.title}</h3>
+              </div>
+            </div>
+          </header>
+
+          <p class="mt-4 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            ${p.summary}
+          </p>
+
+          <ul class="mt-4 space-y-1 text-xs text-slate-500">
+            ${p.topics.map(t => `<li class="flex items-center gap-2"><span class="h-1 w-1 rounded-full ${badgeBg}"></span>${t}</li>`).join('')}
+          </ul>
+
+          <div class="mt-5 flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 dark:border-slate-800 pt-4">
+            <div>
+              <span class="font-semibold text-slate-700 dark:text-slate-300">${p.lessons}</span> lesson${p.lessons===1?'':'s'} ·
+              <span class="font-semibold text-slate-700 dark:text-slate-300">${p.quizzes}</span> quiz${p.quizzes===1?'':'zes'}
+            </div>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-2">
+            <a href="${p.path}README.md" class="inline-flex items-center gap-1 text-xs font-medium rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 px-3 py-1.5 transition">
+              Overview
+            </a>
+            <a href="${p.startLink}" class="inline-flex items-center gap-1 text-xs font-medium rounded-md ${badgeBg} hover:opacity-90 text-white px-3 py-1.5 transition">
+              Start
+              <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <div class="mt-3 text-[11px] text-slate-400">
+            Builds: <span class="font-mono text-slate-500 dark:text-slate-400">${p.projectName}</span>
+          </div>
+        </article>
+      `;
+    }
+
+    document.getElementById('phaseGrid').innerHTML = PHASES.map(phaseCard).join('');
+  </script>
+
+</body>
+</html>
