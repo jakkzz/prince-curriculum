@@ -23,17 +23,24 @@ By the end of this phase, the learner can:
 7. Read a stack trace and explain what each frame did.
 8. Reason about list/dict/set time complexity (Big-O intuition).
 
-## Week structure
+## Lesson order
 
-| Week | Topic | Output |
-|------|-------|--------|
-| 1 | Language basics, syntax, types | Working Python, basic scripts |
-| 2 | Functions, data structures, control flow | Standalone scripts, small katas |
-| 3 | Classes, errors, modules, files | Object-oriented mini-project |
-| 4 | Testing & TDD, debugging, `pdb` | Tested feature on the CLI project |
-| 5 | Build & polish the CLI project | Shipped tool, installable via `pipx` |
+| # | Day | File | Format | Status |
+|---|-----|------|--------|--------|
+| 0 | Setup | [00-setup-environment.md](lessons/00-setup-environment.md) | Markdown | ✅ New format |
+| 1 | Hello Python | [01-hello-python.ipynb](lessons/01-hello-python.ipynb) | Jupyter notebook | ✅ New format |
+| 2 | Types and values | [02-types-and-values.ipynb](lessons/02-types-and-values.ipynb) | Jupyter notebook | ✅ New format |
+| 3 | Control flow | _coming soon_ | Jupyter notebook | 🛠️ In progress |
+| 4 | Functions | _coming soon_ | Jupyter notebook | 🛠️ In progress |
+| 5 | Lists, dicts, sets | _coming soon_ | Jupyter notebook | 🛠️ In progress |
+| 6–10 | Week 2 — Functions, data | [week-2-functions-data.md](lessons/week-2-functions-data.md) | Markdown | 📜 Legacy — pending rewrite |
+| 11–15 | Week 3 — Classes, modules | [week-3-classes-modules.md](lessons/week-3-classes-modules.md) | Markdown | 📜 Legacy — pending rewrite |
+| 16–20 | Week 4 — Testing, TDD | [week-4-testing-tdd.md](lessons/week-4-testing-tdd.md) | Markdown | 📜 Legacy — pending rewrite |
+| 21–25 | Week 5 — Build the project | [week-5-build-project.md](lessons/week-5-build-project.md) | Markdown | 📜 Legacy — pending rewrite |
 
-See [lessons/](lessons/) for week-by-week material.
+> **Note on format:** Lessons 01–05 are Jupyter notebooks — runnable, with pre-rendered output. Open in **VS Code** (has built-in notebook support), **Jupyter Lab** (`uv run --with jupyter jupyter lab`), or **Google Colab** (badge in each notebook).
+>
+> Lessons 06+ are still in the older single-file-per-week format. They'll be rewritten in the same notebook style soon.
 
 ## Gate criteria
 

@@ -1,205 +1,420 @@
 # Day 3 — Git fundamentals
 
-**Goal:** Understand what git actually is, and use it without copy-pasting from Stack Overflow.
+> [!IMPORTANT]
+> **Why this matters.** Git is the most important tool in your entire career. Linux uses it. Google uses it. Every job interview you'll have for the next 30 years will assume you know it. Most people use it for years without understanding what it does — they live in fear of it. Today you'll understand it. After today, git stops being scary.
 
-## The mental model
+## What you'll do today
 
-Git tracks the **history of your project**. Every time you "commit," you take a snapshot. Branches let you have multiple parallel timelines. That's the whole concept.
+**Time:** 3 hours.
 
-You can — and many people do — use git for years without understanding what it's actually doing. Don't be one of them. The 30 minutes you spend on the model below saves you 30 hours over your career.
+By the end you can, from a blank prompt:
 
-## What is a commit?
+- [ ] Explain what a commit is, in 30 seconds, to a 12-year-old
+- [ ] Create a branch, make changes, switch back — and understand why files disappeared
+- [ ] Merge branches and resolve a small conflict
+- [ ] Undo: an uncommitted change, a staged change, a bad commit message
+- [ ] Read someone else's `git log` and understand the project's history
 
-A commit is a **snapshot of every file** in your project at a moment in time, plus:
-- A message you wrote.
-- The previous commit (the "parent").
-- The author and timestamp.
-- A unique hash (the "commit SHA") that identifies it forever.
+## The mental model — read this twice
 
-A branch is a **movable pointer** to a commit. When you commit, the branch pointer moves forward.
+Git tracks **snapshots** of your project. Every commit is a complete photo of every file. Branches are **labels** that point to specific commits. `HEAD` is the label that points to "where you currently are."
 
-`HEAD` is the pointer to "where you currently are." Usually it points to a branch, which points to a commit.
+That's it. That's the whole thing.
 
-## The three states of a file
+```mermaid
+graph LR
+    Commit1[Commit A<br/>Initial] --> Commit2[Commit B<br/>Add README]
+    Commit2 --> Commit3[Commit C<br/>Fix typo]
+    Commit3 --> Commit4[Commit D<br/>Add feature]
 
-This trips up everyone. Learn it now.
-
+    Main[main] -.points to.-> Commit4
+    HEAD[HEAD] -.points to.-> Main
 ```
-working directory   →   staging area   →   commit history
-   (what you see)        (git add)          (git commit)
+
+When you make a new commit, the `main` branch label **moves forward** to the new commit. `HEAD` (which was pointing to `main`) follows along.
+
+### The three places a file can live
+
+```mermaid
+graph LR
+    Working[Working dir<br/>files on disk] -->|git add| Staging[Staging area<br/>'goes in next commit']
+    Staging -->|git commit| History[History<br/>permanent record]
 ```
 
-- **Working directory**: the actual files on disk.
-- **Staging area** (also called "index"): files you've marked as "include in the next commit."
-- **Commit history**: snapshots that are permanent.
+| Place | What it is |
+|-------|------------|
+| **Working directory** | The actual files on disk. What you see in your editor. |
+| **Staging area** | Files marked "include in the next commit." Like a shopping cart. |
+| **Commit history** | Snapshots. Permanent. Have hashes. Can be branched, merged, undone. |
 
-`git status` shows you the state of all three.
+`git status` shows you the state of all three. It's the single most useful git command.
 
-## The commands you must know cold
+> [!NOTE]
+> **In the wild:** The Linux kernel has over 1 million commits. Every Tuesday, Linus Torvalds reviews patches sent by hundreds of contributors — all using git. The same `git log`, `git diff`, `git commit` you're about to use is what runs the operating system on most of the planet's servers.
 
-| Command | What it does |
-|---------|--------------|
-| `git init` | Make this directory a git repo |
-| `git status` | Show working/staging/commit state |
-| `git add file.txt` | Stage a file |
-| `git add .` | Stage everything in current directory (use with care) |
-| `git commit -m "message"` | Snapshot the staged stuff |
-| `git log` | Show history |
-| `git log --oneline` | One line per commit |
-| `git diff` | What changed in the working dir, not yet staged |
-| `git diff --staged` | What's staged, not yet committed |
-| `git restore file.txt` | Revert a file in working dir to last commit |
-| `git restore --staged file.txt` | Unstage |
-
-## Workflow — make your first repo
-
-Do these in the terminal. Don't copy-paste.
+## 1. Make your first repo
 
 ```bash
-cd ~
-mkdir hello-git
-cd hello-git
-git init
+$ cd ~/prince/scratch
+$ mkdir git-day && cd git-day
+$ git init
+Initialized empty Git repository in /Users/you/prince/scratch/git-day/.git/
+
+$ ls -la
+total 0
+drwxr-xr-x   3 you  staff   96 May 20 09:00 .
+drwxr-xr-x   8 you  staff  256 May 20 08:55 ..
+drwxr-xr-x  10 you  staff  320 May 20 09:00 .git
 ```
 
-You just made an empty repo. Inspect:
+That `.git/` folder **is the repo**. Don't touch it directly. Git uses it to store everything: every commit, every branch, every config.
 
 ```bash
-ls -la
+$ git status
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
 ```
 
-You'll see a `.git/` folder. **That folder is the repo.** The files alongside it are just files. Don't touch `.git/` directly.
+Now create a file:
 
 ```bash
-git status
+$ echo "# My git playground" > README.md
+$ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	README.md
+
+nothing added to commit but untracked files present (use "git add" to track)
 ```
 
-It'll say something like "On branch main / No commits yet". Good.
-
-Now make a file:
+`README.md` is **untracked**. Git sees the file but won't include it unless you say so.
 
 ```bash
-echo "# Hello git" > README.md
-git status
+$ git add README.md
+$ git status
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+	new file:   README.md
 ```
 
-Notice: `README.md` is "untracked." Git sees the file but won't include it unless you tell it to.
+Now it's **staged**. About to be committed.
 
 ```bash
-git add README.md
-git status
+$ git commit -m "Initial commit"
+[main (root-commit) 7b3f8a1] Initial commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+
+$ git log
+commit 7b3f8a1f2e9d... (HEAD -> main)
+Author: Your Name <you@example.com>
+Date:   Wed May 20 09:05:23 2026 +0700
+
+    Initial commit
 ```
 
-Now it's "staged." Last step:
+You have a one-commit history.
+
+## 2. The everyday loop
+
+This is what you'll do thousands of times.
 
 ```bash
-git commit -m "Initial commit"
-git log
+# Step 1: Make a change
+$ echo "Some notes." >> README.md
+
+# Step 2: See what changed
+$ git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   README.md
+
+$ git diff
+diff --git a/README.md b/README.md
+index 1c4a0c1..d5e8a3b 100644
+--- a/README.md
++++ b/README.md
+@@ -1 +1,2 @@
+ # My git playground
++Some notes.
+
+# Step 3: Stage and commit
+$ git add README.md
+$ git commit -m "Add a notes line"
+[main 9c2e1f4] Add a notes line
+ 1 file changed, 1 insertion(+)
 ```
 
-You have a one-commit history. Congratulations, you're using git.
+**`git diff` is the second-most-useful command after `git status`.** It shows exactly what you changed. The `-` lines are removed; `+` lines are added.
 
-## Make a few more commits
+### Try it
+
+Make 3 more commits — each one adds or changes a line. Run `git log --oneline` after.
 
 ```bash
-echo "This is my first git project." >> README.md
-git status              # README.md is "modified"
-git diff                # see what changed
-git add README.md
-git commit -m "Add description"
-
-echo "Day 3 of Project Prince" >> README.md
-git add README.md
-git commit -m "Add project context"
-
-git log --oneline       # three commits
+$ git log --oneline
+9c2e1f4 (HEAD -> main) Add a notes line
+7b3f8a1 Initial commit
 ```
 
-## Branches
+`--oneline` is the cleanest log view. The hash on the left is the commit's unique fingerprint. The first 7 chars are enough to refer to it.
+
+## 3. Branches
+
+A branch is a movable label. When you commit on a branch, that label moves forward. The branch you started on (usually `main`) doesn't move unless you commit on it.
 
 ```bash
-git branch              # show branches (you're on main)
-git switch -c feature   # create and switch to a new branch
-echo "experimental" > experiment.txt
-git add experiment.txt
-git commit -m "Try an experiment"
-
-git switch main         # back to main — experiment.txt disappears
-ls                      # confirm
-git switch feature      # back to feature — experiment.txt is back
-ls
+$ git switch -c experiment
+Switched to a new branch 'experiment'
 ```
 
-This is the core idea: branches are parallel timelines.
-
-## Merging
+`-c` = create. You just made `experiment` and switched to it.
 
 ```bash
-git switch main
-git merge feature       # bring feature's changes into main
-git log --oneline       # now main has the experiment commit too
+$ echo "I'm trying something risky." > risky.txt
+$ git add risky.txt
+$ git commit -m "Try something risky"
+[experiment 4d8e3a2] Try something risky
+ 1 file changed, 1 insertion(+)
+ create mode 100644 risky.txt
+
+$ ls
+README.md  risky.txt
+
+$ git switch main
+Switched to branch 'main'
+
+$ ls
+README.md
 ```
 
-## Common mistakes (and the right fix)
+**The file `risky.txt` literally disappeared.** Don't panic. It's not gone — it's just only in the `experiment` branch. Switch back to see it:
 
-### "I made a commit and want to change the message"
 ```bash
-git commit --amend -m "Better message"
+$ git switch experiment
+$ ls
+README.md  risky.txt
 ```
-*Only do this if you haven't pushed yet.* Amending rewrites history.
 
-### "I staged a file I didn't mean to"
+This is the killer feature. **Branches let you try things without contaminating the working version.**
+
+```mermaid
+graph LR
+    A[Initial] --> B[Add notes]
+    B --> C[main]
+    B --> D[Try risky]
+    D --> E[experiment]
+
+    style C fill:#bbf,color:#000
+    style E fill:#fbb,color:#000
+```
+
+When you commit on `experiment`, only `experiment` moves. `main` stays where it was. Both branches share the history up to the branch point.
+
+## 4. Merging
+
+If the experiment was good, merge it into main.
+
 ```bash
-git restore --staged file.txt
+$ git switch main
+$ git merge experiment
+Updating 9c2e1f4..4d8e3a2
+Fast-forward
+ risky.txt | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 risky.txt
+
+$ ls
+README.md  risky.txt
+
+$ git log --oneline --all --graph
+*   4d8e3a2 (HEAD -> main, experiment) Try something risky
+*   9c2e1f4 Add a notes line
+*   7b3f8a1 Initial commit
 ```
 
-### "I modified a file and want to throw away my changes"
+The `--graph` flag draws an ASCII diagram of how commits connect.
+
+## 5. Common mistakes — and how to undo
+
+This is the section everyone needs. Bookmark it.
+
+### "I want to throw away changes I haven't committed"
+
 ```bash
-git restore file.txt
+$ echo "junk I don't want" >> README.md
+$ git status
+modified:   README.md
+
+$ git restore README.md     # working dir back to last commit
+$ git status
+nothing to commit, working tree clean
 ```
-**This is destructive. Your changes are gone.** Use carefully.
 
-### "I deleted a file by accident"
-If you'd already committed it: `git checkout HEAD -- file.txt`.
-If you hadn't: it might be gone forever. Lesson learned: commit often.
+> [!WARNING]
+> `git restore` is **destructive**. Your unsaved changes are gone. Permanent. Be sure.
 
-### "I committed to the wrong branch"
+### "I added a file I didn't mean to"
+
 ```bash
-git log         # find the commit hash of what you want to move
-git switch correct-branch
-git cherry-pick <hash>
-git switch wrong-branch
-git reset --hard HEAD~1   # only if you haven't pushed!
+$ git add accidental.txt
+$ git status
+new file:   accidental.txt
+
+$ git restore --staged accidental.txt    # unstages, keeps file
+$ git status
+Untracked files:
+	accidental.txt
 ```
 
-## Exercises
+### "My last commit message was bad"
 
-### Exercise 1 — Make and inspect commits
-1. Create `~/prince-test-repo`, init it.
-2. Make 5 commits, each adding or changing something. Use real messages.
-3. `git log` — read your history. Can you tell what each commit did from the message alone? If not, your messages are too vague.
+```bash
+$ git commit -m "stuff"            # noooo
+$ git commit --amend -m "Add user authentication endpoint"
+```
 
-### Exercise 2 — Branches and merging
-1. From `main`, create a branch `feature-greeting`.
-2. Add a `greeting.txt` file. Commit.
-3. Switch back to `main`. Confirm `greeting.txt` is gone.
-4. Merge `feature-greeting` into `main`. Confirm it's back.
+> [!WARNING]
+> Only `--amend` if you **haven't pushed yet.** Amending rewrites history. Other people will scream if you rewrite history that's already public.
 
-### Exercise 3 — Read someone else's history
-1. Clone a real project: `git clone https://github.com/python/cpython.git`. *(This will take a few minutes; it's a big repo.)*
-2. `cd cpython`
-3. `git log --oneline | head -20` — read the last 20 commits.
-4. Pick one. `git show <commit-hash>` — read the actual diff.
-5. In your own words, what changed?
+### "I want to undo my last commit but keep the changes"
+
+```bash
+$ git reset --soft HEAD~1
+```
+
+`HEAD~1` = "one commit before HEAD." `--soft` keeps everything staged. You can re-commit it differently.
+
+### "I deleted a file I needed"
+
+If it was committed:
+
+```bash
+$ git checkout HEAD -- lost-file.txt
+```
+
+If it wasn't even committed: it's probably gone forever. Lesson: commit often.
+
+## Mini-project — merge conflict practice
+
+Conflicts are scary the first time. Do this exercise now while the stakes are zero.
+
+```bash
+$ cd ~/prince/scratch/git-day
+
+# Make a feature branch and change line 1
+$ git switch -c feat-greeting
+$ echo "Hello, world!" > greet.txt
+$ git add greet.txt
+$ git commit -m "Add greeting"
+
+# Switch back and make a DIFFERENT change to the same file
+$ git switch main
+$ echo "Welcome, traveler." > greet.txt
+$ git add greet.txt
+$ git commit -m "Add greeting on main"
+
+# Now try to merge
+$ git merge feat-greeting
+Auto-merging greet.txt
+CONFLICT (add/add): Merge conflict in greet.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+$ cat greet.txt
+<<<<<<< HEAD
+Welcome, traveler.
+=======
+Hello, world!
+>>>>>>> feat-greeting
+```
+
+That's a conflict. Git is asking: which one do you want? Or both?
+
+**Fix it manually.** Edit `greet.txt`:
+
+```text
+Welcome, traveler.
+Hello, world!
+```
+
+(Or pick one. Or write something new. Up to you.)
+
+Then:
+
+```bash
+$ git add greet.txt
+$ git commit -m "Merge feat-greeting, keep both greetings"
+
+$ git log --oneline --graph --all
+*   8a1e2c3 (HEAD -> main) Merge feat-greeting, keep both greetings
+|\
+| * 5d3b4f1 (feat-greeting) Add greeting
+* | 2c8e7d4 Add greeting on main
+|/
+*   4d8e3a2 Try something risky
+...
+```
+
+You just resolved a merge conflict. The first time you do this in real work will feel less scary because you've already done it once.
+
+## Connect to the project
+
+> [!TIP]
+> **Connects to the project:** Tomorrow you'll push your `learning-log` repo to GitHub — the repo that will hold every daily log entry for the next 35 weeks. Today's lesson is the engine. Every commit you make for the next 9 months goes through the exact loop you practiced today: change → status → diff → add → commit.
+>
+> Every project after this — `pomo`, `questly`, your real product in Phase 6 — will use branches and PRs for every feature. The branch you made today (`experiment`) is the small-stakes version of a feature branch you'll make 200 times.
 
 ## Self-check
 
-1. What's the difference between `git add` and `git commit`?
-2. What's the difference between a branch and a commit?
-3. What does `HEAD` mean?
-4. If you run `git restore file.txt`, what happens to changes you'd made to that file?
-5. If you run `git status` and see "modified: foo.py" in red, then run `git add foo.py`, what changes about the next `git status` output?
+<details>
+<summary>1. What is a commit, conceptually?</summary>
 
-## Tomorrow
+A snapshot of every tracked file at a moment in time, plus a message, an author, a timestamp, and a pointer to the parent commit. It's a complete photo, not a "diff" — though tools show you it as a diff.
+</details>
 
-GitHub. Putting your repo on the internet, making pull requests.
+<details>
+<summary>2. What's the difference between <code>git add</code> and <code>git commit</code>?</summary>
+
+`git add` puts files in the staging area — "I want this in the next commit." `git commit` actually creates the snapshot from whatever's staged.
+</details>
+
+<details>
+<summary>3. What's a branch?</summary>
+
+A movable pointer to a commit. When you make a new commit on a branch, that pointer advances. Multiple branches can point to the same commit, or to different ones.
+</details>
+
+<details>
+<summary>4. You ran <code>git restore file.txt</code> by accident. Your changes are gone. Can you recover them?</summary>
+
+Generally **no.** `git restore` is destructive on the working directory. Anything not committed is lost. This is why "commit often" matters more than "commit perfectly."
+</details>
+
+<details>
+<summary>5. You committed with the message "stuff" and want to change it. What's the command? When is it dangerous?</summary>
+
+`git commit --amend -m "Better message"`. Dangerous if you've already pushed the commit — amending rewrites history, and your push won't go cleanly. Only amend before pushing.
+</details>
+
+<details>
+<summary>6. You see <code>HEAD -> main</code> in a git log. What does each part mean?</summary>
+
+`HEAD` is the pointer to "where you currently are." `main` is a branch (also a pointer). `HEAD -> main` means HEAD is pointing to the `main` branch, which points to this commit. Normal everyday state.
+</details>
+
+## What's next
+
+Tomorrow: GitHub. You'll push your work to the internet, open your first pull request, and watch CI run.
