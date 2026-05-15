@@ -41,20 +41,29 @@ You can't move to tomorrow until today's mini-project is committed and the quiz 
 
 ## Lesson order
 
-| # | Day | Lesson | Mini-project | Quiz |
-|---|-----|--------|--------------|------|
-| 0 | Setup | [00-setup-environment.md](lessons/00-setup-environment.md) | (`uv init english-helper`) | — |
-| 1 | Hello Python | [01-hello-python.ipynb](lessons/01-hello-python.ipynb) | `vocab_card.py` | [01-quiz](lessons/01-hello-python-quiz.ipynb) (35 Q) |
-| 2 | Types & values | [02-types-and-values.ipynb](lessons/02-types-and-values.ipynb) | `word_list.py` | [02-quiz](lessons/02-types-and-values-quiz.ipynb) (36 Q) |
-| 3 | Control flow | _coming soon_ | `pronunciation_quiz.py` | _coming soon_ |
-| 4 | Functions | _coming soon_ | `dictionary.py` | _coming soon_ |
-| 5 | Lists, dicts, sets | _coming soon_ | `vocab_app.py` | _coming soon_ |
-| 6–10 | Week 2 — `requests`, JSON, files | [week-2-functions-data.md](lessons/week-2-functions-data.md) (legacy) | Free Dictionary API integration | — |
-| 11–15 | Week 3 — Classes, modules | [week-3-classes-modules.md](lessons/week-3-classes-modules.md) (legacy) | Refactor with dataclasses + classes | — |
-| 16–20 | Week 4 — Testing & TDD | [week-4-testing-tdd.md](lessons/week-4-testing-tdd.md) (legacy) | Test the whole tool | — |
-| 21–25 | Week 5 — Build & ship | [week-5-build-project.md](lessons/week-5-build-project.md) (legacy) | Ship `english-helper` + `pomo` | — |
+### Week 1 — Language basics (complete ✅)
 
-> **Format notes.** Notebook lessons open in VS Code (built-in support), Jupyter Lab (`uv run --with jupyter jupyter lab`), or Google Colab (badge at top of each notebook). Days 3–5 lessons + quizzes are still being converted; for now, follow the legacy `week-N-*.md` files at the bottom of the table.
+| # | Day | Lesson | Mini-project | Quiz (student) |
+|---|-----|--------|--------------|----------------|
+| 0 | Setup | [00-setup-environment.md](lessons/00-setup-environment.md) | (`uv init english-helper`) | — |
+| 1 | Hello Python | [01-hello-python.ipynb](lessons/01-hello-python.ipynb) | `vocab_card.py` | [Day 1 Quiz](lessons/01-hello-python-quiz.ipynb) (35 Q) |
+| 2 | Types & values | [02-types-and-values.ipynb](lessons/02-types-and-values.ipynb) | `word_list.py` | [Day 2 Quiz](lessons/02-types-and-values-quiz.ipynb) (36 Q) |
+| 3 | Control flow | [03-control-flow.ipynb](lessons/03-control-flow.ipynb) | `pronunciation_quiz.py` | [Day 3 Quiz](lessons/03-control-flow-quiz.ipynb) (35 Q) |
+| 4 | Functions | [04-functions.ipynb](lessons/04-functions.ipynb) | `dictionary.py` | [Day 4 Quiz](lessons/04-functions-quiz.ipynb) (35 Q) |
+| 5 | Lists, dicts, sets, JSON | [05-lists-dicts-sets.ipynb](lessons/05-lists-dicts-sets.ipynb) | `vocab_app.py` (first persistent build) | [Day 5 Quiz](lessons/05-lists-dicts-sets-quiz.ipynb) (35 Q) |
+
+### Weeks 2–5 — Pending rewrite into new format
+
+| # | Week | Topic | Legacy file | Outcome |
+|---|------|-------|-------------|---------|
+| 6–10 | 2 | `requests`, JSON, files, modules | [week-2-functions-data.md](lessons/week-2-functions-data.md) | english-helper hits Free Dictionary API for real definitions |
+| 11–15 | 3 | Classes, dataclasses, modules | [week-3-classes-modules.md](lessons/week-3-classes-modules.md) | Refactor to OOP — `Word`, `WordStore`, `SRSScheduler` |
+| 16–20 | 4 | Testing with pytest, TDD | [week-4-testing-tdd.md](lessons/week-4-testing-tdd.md) | 80%+ coverage on english-helper |
+| 21–25 | 5 | Build & ship | [week-5-build-project.md](lessons/week-5-build-project.md) | Ship `english-helper` AND the `pomo` capstone |
+
+> **Format notes.** Notebook lessons open in VS Code (built-in `.ipynb` support), Jupyter Lab (`uv run --with jupyter jupyter lab`), or Google Colab (badge at top of each notebook).
+>
+> **Quiz separation.** Student quizzes (`*-quiz.ipynb`) have questions only. Mentor-only answer notebooks (`*-quiz-answers.ipynb`) live in the mentor repo and are stripped automatically by `publish-learner-repo.sh`. Auto-generated via `instructor-guide/tools/strip-quiz-answers.py`.
 
 ## Gate criteria
 
