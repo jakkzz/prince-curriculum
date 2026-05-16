@@ -2,6 +2,8 @@
 
 > [!IMPORTANT]
 > **Why this matters.** Pixar movies are rendered with terminal commands. Netflix deploys with them. Every server, every database, every CI pipeline — terminal first. Programmers who fight the terminal stay junior. Programmers who love it move 10× faster than the rest. Today you start loving it.
+>
+> 🇹🇭 *หนัง Pixar เรนเดอร์ด้วย terminal · Netflix deploy ด้วย terminal · ทุกเซิร์ฟเวอร์ ทุกฐานข้อมูล ทุก CI pipeline เริ่มที่ terminal · โปรแกรมเมอร์ที่ฝืน terminal จะเก่งช้า · คนที่รัก terminal จะทำงานเร็วกว่าคนอื่น 10 เท่า · วันนี้เริ่มรักมันได้แล้ว*
 
 ## What you'll do today
 

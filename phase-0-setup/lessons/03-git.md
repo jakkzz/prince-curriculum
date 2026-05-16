@@ -2,6 +2,8 @@
 
 > [!IMPORTANT]
 > **Why this matters.** Git is the most important tool in your entire career. Linux uses it. Google uses it. Every job interview you'll have for the next 30 years will assume you know it. Most people use it for years without understanding what it does — they live in fear of it. Today you'll understand it. After today, git stops being scary.
+>
+> 🇹🇭 *Git คือเครื่องมือสำคัญที่สุดในอาชีพโปรแกรมเมอร์ — Linux ใช้ Google ใช้ และอีก 30 ปีข้างหน้าทุกบริษัทที่จะสัมภาษณ์เธอจะคาดว่าเธอใช้เป็น คนส่วนใหญ่ใช้ git อยู่หลายปีโดยไม่เข้าใจ — เขาเลยกลัวมัน วันนี้เธอจะเข้าใจ และหลังจากวันนี้ git จะไม่น่ากลัวอีกต่อไป*
 
 ## What you'll do today
 

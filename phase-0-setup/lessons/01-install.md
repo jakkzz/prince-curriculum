@@ -2,6 +2,8 @@
 
 > [!IMPORTANT]
 > **Why this matters.** You can't write software without an environment to write it in. Most learners don't quit because the math is hard — they quit because Day 1's install broke and nobody told them how to recover. Spend today doing this right. You'll never think about it again.
+>
+> 🇹🇭 *เพื่อนเรียนเขียนโปรแกรมส่วนใหญ่ไม่ได้เลิกเพราะคณิตศาสตร์ยาก แต่เลิกเพราะติดตั้งเครื่องมือวันแรกไม่สำเร็จและไม่มีใครช่วย วันนี้ตั้งใจทำให้ถูกต้องครั้งเดียว แล้วจะไม่ต้องคิดเรื่องนี้อีกตลอด 9 เดือนข้างหน้า*
 
 ## What you'll do today
 

@@ -2,6 +2,8 @@
 
 > [!IMPORTANT]
 > **Why this matters.** Git lives on your laptop. GitHub puts it on the internet — where collaborators, future employers, and your future self can find it. Your GitHub profile *is* your résumé in this industry. Today you start writing it. By the end of this course it'll be a 35-week wall of green commits, eight projects, eight phase-demo videos. That artifact, that visible record of consistent work — that's the prize behind the laptop.
+>
+> 🇹🇭 *Git อยู่บนเครื่องเธอ — GitHub เอามันขึ้นอินเทอร์เน็ตให้คนอื่นเห็น คนที่จ้างเธอในอนาคต เพื่อนร่วมงาน และตัวเธอเองในวันข้างหน้าจะหาเธอเจอที่นี่ GitHub profile **คือ** เรซูเม่ในวงการนี้ วันนี้เริ่มเขียนมัน — 35 สัปดาห์ข้างหน้าจะเป็นกำแพง commit สีเขียว 8 โปรเจกต์ 8 วิดีโอ ไอ้สิ่งที่เห็นได้นั่นแหละคือรางวัลที่แท้จริง ไม่ใช่แค่ MacBook*
 
 ## What you'll do today
 
