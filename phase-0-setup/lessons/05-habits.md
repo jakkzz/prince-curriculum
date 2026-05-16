@@ -3,7 +3,7 @@
 > [!IMPORTANT]
 > **Why this matters.** Some kids who started this course with shaky math have shipped real apps. Others with perfect grades quit at month 4. The variable isn't IQ. It isn't talent. It's whether they kept showing up on the Tuesday in February when nobody was watching. Today you build the system that gets you to that Tuesday.
 >
-> 🇹🇭 *เด็กบางคนที่เริ่มเรียนคอร์สนี้โดยเรียนคณิตศาสตร์ไม่เก่ง กลับสร้างแอปจริงสำเร็จ บางคนเกรดเฉลี่ย 4.00 แต่เลิกตอนเดือนที่ 4 ตัวแปรไม่ใช่ IQ ไม่ใช่พรสวรรค์ ตัวแปรคือ "เธอจะนั่งเปิด laptop ทำต่อมั้ย ในวันอังคารเดือนกุมภาที่ไม่มีใครจ้องมอง" วันนี้เธอสร้างระบบที่จะพาเธอไปถึงวันอังคารนั้น*
+> 🇹🇭 *เด็กบางคนที่เริ่มเรียนคอร์สนี้โดยเรียนคณิตศาสตร์ไม่เก่ง กลับสร้างแอปจริงสำเร็จ บางคนเกรด 4.00 แต่เลิกตอนเดือนที่ 4 ตัวแปรไม่ใช่ IQ ไม่ใช่พรสวรรค์ ตัวแปรคือ "จะนั่งเปิด laptop ทำต่อมั้ย ในวันอังคารเดือนกุมภาที่ไม่มีใครจ้องมอง" วันนี้สร้างระบบที่จะพาคุณไปถึงวันอังคารนั้น*
 
 ## What you'll do today
 
