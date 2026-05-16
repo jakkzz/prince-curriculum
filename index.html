@@ -1,11 +1,20 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Project Prince — Real progress, real curriculum</title>
   <meta name="description" content="A 9-month project-based curriculum with real progress tracking. Python, TypeScript, FastAPI, Next.js, SQL, deploy, AI capstone." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='52'%3E%F0%9F%8E%AF%3C/text%3E%3C/svg%3E" />
+
+  <!-- Apply saved theme BEFORE paint to avoid flash. Default is light. -->
+  <script>
+    try {
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    } catch (e) {}
+  </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="module">
@@ -1515,7 +1524,8 @@ const ITEMS = [
         session = newSession;
         renderAuthState();
         if (session) {
-          loadProgress().then(renderAll);
+          // Load progress + profile (theme) in parallel
+          Promise.all([loadProgress(), loadProfile()]).then(renderAll);
         } else {
           progress.clear();
           renderAll();
@@ -1806,20 +1816,42 @@ const ITEMS = [
     }
 
     // -----------------------------------------------------------
-    // 4. Theme
+    // 4. Theme — light default, persisted to localStorage AND to
+    //    Supabase profile (so preference syncs across devices).
     // -----------------------------------------------------------
-    function setTheme(t) {
+    function setTheme(t, opts = {}) {
       const html = document.documentElement;
       if (t === 'dark') html.classList.add('dark'); else html.classList.remove('dark');
       try { localStorage.setItem('theme', t); } catch (e) {}
+      // Sync to Supabase profile if signed in (fire and forget)
+      if (opts.sync !== false && session && supabase) {
+        supabase.from('profiles').update({ theme: t }).eq('id', session.user.id)
+          .then(({ error }) => { if (error) console.warn('theme sync:', error.message); });
+      }
     }
     function toggleTheme() {
       setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
     }
-    try {
-      const t = localStorage.getItem('theme');
-      if (t === 'light') setTheme('light');
-    } catch (e) {}
+    // Note: pre-paint theme was already applied by the inline <script> in <head>.
+
+    // Fetch profile + apply theme on sign-in. Called from initSupabase / auth state change.
+    async function loadProfile() {
+      if (!session || !supabase) return;
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('theme')
+        .eq('id', session.user.id)
+        .maybeSingle();
+      if (error) {
+        console.warn('loadProfile:', error.message);
+        return;
+      }
+      const remoteTheme = data?.theme;
+      if (remoteTheme && (remoteTheme === 'light' || remoteTheme === 'dark')) {
+        // Apply without re-syncing (we just got this value FROM Supabase)
+        setTheme(remoteTheme, { sync: false });
+      }
+    }
 
     // -----------------------------------------------------------
     // 5. Boot
@@ -1827,7 +1859,9 @@ const ITEMS = [
     (async function boot() {
       if (isSupabaseConfigured()) {
         await initSupabase();
-        if (session) await loadProgress();
+        if (session) {
+          await Promise.all([loadProgress(), loadProfile()]);
+        }
       }
       renderAll();
     })();

@@ -51,8 +51,17 @@ create table if not exists public.profiles (
     username        text unique,
     full_name       text,
     avatar_url      text,
+    theme           text default 'light' check (theme in ('light', 'dark')),
     started_at      timestamptz default now()
 );
+
+-- Idempotent migration: add `theme` column if the table already existed without it.
+alter table public.profiles
+    add column if not exists theme text default 'light';
+
+-- Constrain theme values (idempotent — drop + recreate constraint).
+alter table public.profiles drop constraint if exists profiles_theme_check;
+alter table public.profiles add constraint profiles_theme_check check (theme in ('light', 'dark'));
 
 alter table public.profiles enable row level security;
 

@@ -23,7 +23,9 @@ Once the project is ready:
 4. Click **Run** (or `Cmd+Enter`).
 5. Confirm: bottom panel says "Success. No rows returned."
 
-You now have a `progress` table with Row Level Security on. Anyone who logs in only sees their own data.
+You now have a `progress` table (lessons + quizzes tracked) AND a `profiles` table (per-user preferences like theme), both with Row Level Security on. Each user only sees their own data.
+
+> **Updating from an older schema?** Just re-run [`schema.sql`](schema.sql). Every statement is idempotent (`if not exists`, `or replace`, `drop … if exists`). Safe to run as many times as you like; safe to deploy as schema evolves.
 
 ## 3. Set up GitHub OAuth (the sign-in method)
 
