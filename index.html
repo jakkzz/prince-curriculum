@@ -185,8 +185,8 @@
         <p class="mt-2 text-sm text-amber-900 dark:text-amber-200/80">
           Progress tracking needs a free Supabase project (10-min setup). Until then, you can still
           browse all the lessons — they're linked below. <br />
-          <a href="https://github.com/jakkzz/prince-curriculum-mentor/blob/main/supabase/setup.md"
-             target="_blank" class="underline font-medium">Read the setup guide →</a>
+          <a href="reader.html?path=supabase%2Fsetup.md"
+             target="_blank" rel="noreferrer" class="underline font-medium">Read the setup guide →</a>
         </p>
       </div>
 
@@ -457,7 +457,7 @@
                   <div class="text-xs uppercase tracking-widest font-semibold text-amber-700 dark:text-amber-400">Day 1 — the only fixed thing</div>
                   <p class="mt-1 text-sm font-semibold text-slate-900 dark:text-slate-100">Open it. After that, you set the pace.</p>
                 </div>
-                <a href="phase-0-setup/lessons/01-install.md" class="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-semibold px-6 py-3 hover:opacity-90 transition shadow-lg shadow-slate-900/10">
+                <a href="reader.html?path=phase-0-setup%2Flessons%2F01-install.md" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-semibold px-6 py-3 hover:opacity-90 transition shadow-lg shadow-slate-900/10">
                   I'm in. Start Day 1.
                   <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                 </a>
@@ -541,6 +541,15 @@
       url:     'YOUR_SUPABASE_URL',          // e.g. https://abcdefghij.supabase.co
       anonKey: 'YOUR_SUPABASE_ANON_KEY',     // a long string starting with eyJ...
     };
+
+    // Markdown opens in our same-origin reader for consistent rendering on every device.
+    // Notebooks still use GitHub's notebook viewer.
+    const REPO_BASE = 'https://github.com/jakkzz/prince-curriculum/blob/main/';
+    function contentUrl(path) {
+      return path.toLowerCase().endsWith('.md')
+        ? `reader.html?path=${encodeURIComponent(path)}`
+        : REPO_BASE + path;
+    }
 
     // Phase metadata for the cards + dashboard
     const PHASES = [
@@ -1724,12 +1733,16 @@ const ITEMS = [
       if (next) {
         nextUp.classList.remove('hidden');
         document.getElementById('nextUpLink').textContent = next.title;
-        document.getElementById('nextUpLink').href = next.path;
+        document.getElementById('nextUpLink').href = contentUrl(next.path);
+        document.getElementById('nextUpLink').target = '_blank';
+        document.getElementById('nextUpLink').rel = 'noreferrer';
         document.getElementById('nextUpJump').href = `#phase-${next.phase}`;
       } else if (done > 0) {
         nextUp.classList.remove('hidden');
         document.getElementById('nextUpLink').textContent = '🎯 You finished everything. Time to ship the capstone.';
-        document.getElementById('nextUpLink').href = 'phase-7-ai/README.md';
+        document.getElementById('nextUpLink').href = contentUrl('phase-7-ai/README.md');
+        document.getElementById('nextUpLink').target = '_blank';
+        document.getElementById('nextUpLink').rel = 'noreferrer';
       } else {
         nextUp.classList.add('hidden');
       }
@@ -1825,7 +1838,7 @@ const ITEMS = [
             : `<span class="h-4 w-4 rounded border border-slate-300 dark:border-slate-700 inline-block" title="Sign in to track"></span>`
           }
           ${typeBadge}
-          <a href="${it.path}" class="text-sm flex-1 truncate hover:text-brand-500 transition ${done ? 'line-through' : ''}">${it.title}</a>
+          <a href="${contentUrl(it.path)}" target="_blank" rel="noreferrer" class="text-sm flex-1 truncate hover:text-brand-500 transition ${done ? 'line-through' : ''}">${it.title}</a>
           ${score != null ? `<span class="text-xs font-mono text-slate-500">${score}%</span>` : ''}
         </li>
       `;

@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Curriculum reader — Project Prince</title>
+  <meta name="description" content="Project Prince curriculum document reader" />
+  <script>
+    try {
+      if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+    } catch (e) {}
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --surface: #fff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --code: #f1f5f9;
+      --brand: #0284c7;
+      --quote: #f0f9ff;
+    }
+    html.dark {
+      color-scheme: dark;
+      --bg: #020617;
+      --surface: #0f172a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --border: #334155;
+      --code: #1e293b;
+      --brand: #38bdf8;
+      --quote: #0c4a6e33;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.7 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-wrap: break-word;
+    }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      background: color-mix(in srgb, var(--surface) 90%, transparent);
+      backdrop-filter: blur(10px);
+    }
+    .topbar-inner {
+      width: min(100% - 2rem, 920px);
+      min-height: 56px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .nav-group { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: .35rem .7rem;
+      border: 1px solid var(--border);
+      border-radius: .5rem;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: .875rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .button:hover { border-color: var(--brand); color: var(--brand); }
+    #documentName { color: var(--muted); font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    main {
+      width: min(100% - 2rem, 920px);
+      margin: 2rem auto 4rem;
+      padding: clamp(1.25rem, 4vw, 3.5rem);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--surface);
+      box-shadow: 0 12px 35px rgb(15 23 42 / .06);
+    }
+    .status { color: var(--muted); text-align: center; padding: 3rem 1rem; }
+    .error { color: #be123c; }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+      line-height: 1.25;
+      scroll-margin-top: 76px;
+    }
+    .markdown-body h1 { margin: 0 0 1.5rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border); font-size: clamp(2rem, 7vw, 3rem); }
+    .markdown-body h2 { margin: 2.5rem 0 1rem; padding-bottom: .35rem; border-bottom: 1px solid var(--border); font-size: 1.65rem; }
+    .markdown-body h3 { margin: 2rem 0 .75rem; font-size: 1.3rem; }
+    .markdown-body h4 { margin: 1.5rem 0 .5rem; }
+    .markdown-body a { color: var(--brand); text-underline-offset: 2px; }
+    .markdown-body img { display: block; max-width: 100%; height: auto; margin: 1.5rem auto; border-radius: .5rem; }
+    .markdown-body pre {
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: .65rem;
+      background: var(--code);
+      font-size: .875rem;
+      line-height: 1.55;
+      tab-size: 2;
+      -webkit-overflow-scrolling: touch;
+    }
+    .markdown-body :not(pre) > code {
+      padding: .12rem .35rem;
+      border-radius: .3rem;
+      background: var(--code);
+      font-size: .875em;
+    }
+    .markdown-body table { width: 100%; border-collapse: collapse; }
+    .markdown-body .table-wrap { max-width: 100%; overflow-x: auto; margin: 1.25rem 0; -webkit-overflow-scrolling: touch; }
+    .markdown-body th, .markdown-body td { padding: .55rem .75rem; border: 1px solid var(--border); text-align: left; min-width: 7rem; }
+    .markdown-body th { background: var(--code); }
+    .markdown-body blockquote { margin: 1.25rem 0; padding: .25rem 1rem; border-left: 4px solid var(--brand); background: var(--quote); color: var(--muted); }
+    .markdown-body hr { margin: 2rem 0; border: 0; border-top: 1px solid var(--border); }
+    .markdown-body li + li { margin-top: .25rem; }
+    .markdown-body input[type="checkbox"] { width: 1rem; height: 1rem; margin-right: .4rem; }
+    @media (max-width: 560px) {
+      .topbar-inner { width: min(100% - 1rem, 920px); }
+      main { width: 100%; margin: 0; padding: 1.25rem; border: 0; border-radius: 0; box-shadow: none; }
+      #documentName { display: none; }
+      .button { padding: .3rem .55rem; }
+    }
+    @media print {
+      .topbar { display: none; }
+      body, main { background: #fff; color: #000; }
+      main { width: 100%; margin: 0; padding: 0; border: 0; box-shadow: none; }
+      a { color: #000 !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="nav-group">
+        <a class="button" href="./" aria-label="Back to curriculum">← Curriculum</a>
+        <span id="documentName"></span>
+      </div>
+      <div class="nav-group">
+        <a id="githubLink" class="button" href="https://github.com/jakkzz/prince-curriculum" target="_blank" rel="noreferrer">GitHub</a>
+        <button id="themeButton" class="button" type="button" aria-label="Toggle color theme">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="content" class="markdown-body" aria-live="polite">
+    <div class="status">Loading document…</div>
+  </main>
+
+  <script src="assets/vendor/marked.min.js"></script>
+  <script src="assets/vendor/purify.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var REPO_BLOB_BASE = 'https://github.com/jakkzz/prince-curriculum/blob/main/';
+      var content = document.getElementById('content');
+      var documentName = document.getElementById('documentName');
+      var githubLink = document.getElementById('githubLink');
+      var siteRoot = new URL('./', window.location.href);
+      var path = new URLSearchParams(window.location.search).get('path') || '';
+
+      function validMarkdownPath(value) {
+        return value && !value.startsWith('/') && !value.includes('\\') &&
+          value.split('/').every(function (part) { return part && part !== '.' && part !== '..'; }) &&
+          /\.md$/i.test(value);
+      }
+
+      function showError(message) {
+        content.innerHTML = '<div class="status error"><strong>Document unavailable</strong><br>' + message + '</div>';
+        document.title = 'Document unavailable — Project Prince';
+      }
+
+      function slugify(text, used) {
+        var base = text.toLowerCase().trim()
+          .replace(/[^a-z0-9_\s\u0E00-\u0E7F-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-') || 'section';
+        var slug = base;
+        var number = 1;
+        while (used[slug]) slug = base + '-' + (++number);
+        used[slug] = true;
+        return slug;
+      }
+
+      function prepareRenderedDocument(sourceUrl) {
+        var rootPath = siteRoot.pathname;
+        var usedIds = {};
+
+        content.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(function (heading) {
+          if (!heading.id) heading.id = slugify(heading.textContent, usedIds);
+        });
+
+        content.querySelectorAll('table').forEach(function (table) {
+          var wrapper = document.createElement('div');
+          wrapper.className = 'table-wrap';
+          table.parentNode.insertBefore(wrapper, table);
+          wrapper.appendChild(table);
+        });
+
+        content.querySelectorAll('img[src]').forEach(function (image) {
+          try { image.src = new URL(image.getAttribute('src'), sourceUrl).href; } catch (e) {}
+          image.loading = 'lazy';
+        });
+
+        content.querySelectorAll('a[href]').forEach(function (link) {
+          var rawHref = link.getAttribute('href');
+          if (!rawHref || rawHref.charAt(0) === '#') return;
+          try {
+            var target = new URL(rawHref, sourceUrl);
+            var isLocal = target.origin === siteRoot.origin && target.pathname.indexOf(rootPath) === 0;
+            var relativePath = isLocal ? decodeURIComponent(target.pathname.slice(rootPath.length)) : '';
+
+            if (isLocal && /\.md$/i.test(relativePath)) {
+              link.href = 'reader.html?path=' + encodeURIComponent(relativePath) + target.hash;
+            } else if (isLocal && /\.ipynb$/i.test(relativePath)) {
+              link.href = REPO_BLOB_BASE + relativePath + target.hash;
+              link.target = '_blank';
+              link.rel = 'noreferrer';
+            } else {
+              link.href = target.href;
+              if (!isLocal) {
+                link.target = '_blank';
+                link.rel = 'noreferrer';
+              }
+            }
+          } catch (e) {}
+        });
+
+        var firstHeading = content.querySelector('h1');
+        var title = firstHeading ? firstHeading.textContent.trim() : path.split('/').pop().replace(/\.md$/i, '');
+        document.title = title + ' — Project Prince';
+        documentName.textContent = path;
+        githubLink.href = REPO_BLOB_BASE + path;
+
+        if (window.location.hash) {
+          var targetElement = document.getElementById(decodeURIComponent(window.location.hash.slice(1)));
+          if (targetElement) requestAnimationFrame(function () { targetElement.scrollIntoView(); });
+        }
+      }
+
+      document.getElementById('themeButton').addEventListener('click', function () {
+        document.documentElement.classList.toggle('dark');
+        try { localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); } catch (e) {}
+      });
+
+      if (!validMarkdownPath(path)) {
+        showError('The document path is missing or invalid.');
+        return;
+      }
+      if (!window.marked || !window.DOMPurify) {
+        showError('The local Markdown renderer could not be loaded.');
+        return;
+      }
+
+      var sourceUrl = new URL(path, siteRoot);
+      fetch(sourceUrl.href, { credentials: 'same-origin' })
+        .then(function (response) {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.text();
+        })
+        .then(function (markdown) {
+          var rendered = window.marked.parse(markdown, { gfm: true, breaks: false });
+          content.innerHTML = window.DOMPurify.sanitize(rendered, { USE_PROFILES: { html: true } });
+          prepareRenderedDocument(sourceUrl);
+        })
+        .catch(function () {
+          showError('Check that the link is correct, then try again.');
+        });
+    }());
+  </script>
+</body>
+</html>
